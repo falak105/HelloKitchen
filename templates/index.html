@@ -1,9 +1,17 @@
+{% load static %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' ,'css/styles.css','css/bootstrap.min.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
     <meta charset="utf-8">
-    <title>Restoran - Bootstrap Restaurant Template</title>
+    <title>Hello Kitchen</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -830,3 +838,5 @@
 </body>
 
 </html>
+
+{% endblock content %}
