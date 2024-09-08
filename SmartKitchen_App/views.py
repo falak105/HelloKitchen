@@ -7,8 +7,10 @@ def about(request):
     return render(request,'about.html')
 def contact(request):
     return render(request,'contact.html')
-def booking(request):
-    return render(request,'booking.html')
+def userreg(request):
+    return render(request,'userreg.html')
+def userlogin(request):
+    return render(request,'userlogin.html')
 def menu(request):
     return render(request, 'menu.html')
 def service(request):
