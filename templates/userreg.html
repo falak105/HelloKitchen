@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<head>
+<style>
+    /* Glassmorphism Effect on Forms */
+    body{
+        background-image: url(/static/img/bg-hero.jpg);
+        background-repeat: no-repeat;
+        background-position: 100%;
+        background-size: cover;
+    }
+    .form-box {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 40px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        text-align: center;
+        width: 350px;
+    }
+    
+    .form-box h2 {
+        color: #fff;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    .input-box {
+        position: relative;
+        margin-bottom: 30px;
+    }
+    
+    .input-box input {
+        width: 100%;
+        padding: 10px;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid #ffc107;
+        outline: none;
+        color: #fff;
+        font-size: 16px;
+    }
+    
+    .input-box label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: #000;
+        font-size: 16px;
+        pointer-events: none;
+        transition: 0.5s;
+    }
+    
+    .input-box input:focus ~ label,
+    .input-box input:valid ~ label {
+        top: -18px;
+        left: 0;
+        color: #ffc107;
+        font-size: 12px;
+    }
+    
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #ffc107;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    button:hover {
+        background-color: #ffcd38;
+    }
+    
+    .register-box .login {
+        margin-top: 20px;
+        color: #fff;
+        font-size: 14px;
+    }
+    
+    .register-box .login a {
+        color: #ffc107;
+        text-decoration: none;
+    }
+    
+    .register-box .login a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+    <!-- Registration Form -->
+    <center><br><br><br><br><br>
+    <div class="container">
+        <div class="form-box register-box">
+            <h2>Register</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-box">
+                    <input type="text" required>
+                    <label for="username">Enter your username</label>
+                </div>
+                <div class="input-box">
+                    <input type="email" required>
+                    <label for="email">Enter your email</label>
+                </div>
+                <div class="input-box">
+                    <input type="password" required>
+                    <label for="password">Enter your password</label>
+                </div>
+                <div class="input-box">
+                    <input type="password" required>
+                    <label for="confirm-password">Confirm your password</label>
+                </div>
+                <button type="submit">Register</button>
+                <div class="login">
+                    Already have an account? <a href="{% url 'userlogin' %}">Log In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    </center><br><br><br><br><br>
+</body>
+{% endblock content %}

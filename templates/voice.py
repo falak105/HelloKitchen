@@ -2,8 +2,7 @@ import openai
 import pyttsx3
 import speech_recognition as sr
 import time
-
-#set tour openai api key
+#set your openai api key
 openai.api_key=""
 
 #initialize the text-to-speech engine
@@ -37,16 +36,16 @@ def speak_text(text):
 def main():
     while True:
         # Wait for user to say "Genius"
-        print("Say 'Genius' to start recording your question...")
+        print("Say 'kitchen' to start recording your question...")
         with sr.Microphone() as source:
             recognizer = sr.Recognizer()
             audio = recognizer.listen(source)
             try:
                 transcription =  recognizer.recognize_google(audio)
-                if transcription.lower()=="genius":
+                if transcription.lower()=="kitchen":
                     #Record Audio
                     filename = "input.wav"
-                    print("Say youe question...")
+                    print("Say your question...")
                     with sr.Microphone() as source:
                         recognizer = sr.Recognizer()
                         source.pause_threshold=1

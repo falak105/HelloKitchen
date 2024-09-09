@@ -37,6 +37,7 @@
  <div class="container-xxl position-relative p-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
         <a href="" class="navbar-brand p-0">
+            <!-- <h1 class="text-primary m-0"><i class="fa fa-utensils me-3"></i>HelloKitchen</h1> -->
             <h1 class="text-primary m-0"><i class="fa fa-utensils me-3"></i>Smart Kitchen</h1>
             <!-- <img src="img/logo.png" alt="Logo"> -->
         </a>
@@ -49,17 +50,18 @@
                 <a href="{% url 'about' %}" class="nav-item nav-link {% if request.path == '/about/' %}active{% endif %} ">About</a>
                 <a href="{% url 'service' %}" class="nav-item nav-link {% if request.path == '/service/' %}active{% endif %} ">Service</a>
                 <a href="{% url 'menu' %}" class="nav-item nav-link {% if request.path == '/menu/' %}active{% endif %} ">Menu</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle {% if request.path == '/booking/' or request.path == '/team/' or request.path == '/testimonial/' %}active{% endif %}" data-bs-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="{% url 'booking' %}" class="dropdown-item {% if request.path == '/booking/' %}active{% endif %}">Booking</a>
-                        <a href="{% url 'team' %}" class="dropdown-item {% if request.path == '/team/' %}active{% endif %}">Our Team</a>
-                        <a href="{% url 'testimonial' %}" class="dropdown-item {% if request.path == '/testimonial/' %}active{% endif %}">Testimonial</a>
-                    </div>
-                </div>
+                
                 <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact</a>
             </div>
-            <a href="" class="btn btn-primary py-2 px-4">Book A Table</a>
+            <div class="nav-item dropdown"><a href="" class="btn btn-primary py-2 px-4">Login</a>
+                <div class="nav-item dropdown">
+                    <div class="dropdown-menu m-0">
+                        <a href="{% url 'userlogin' %}" class="dropdown-item {% if request.path == '/userlogin/' %}active{% endif %}">LogIn</a>
+                        <a href="{% url 'userreg' %}" class="dropdown-item {% if request.path == '/userreg/' %}active{% endif %}">Registration </a>
+                    </div>
+                </div>
+            </div>
+        
         </div>
     </nav>
 

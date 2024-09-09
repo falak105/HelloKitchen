@@ -1,5 +1,10 @@
-from django.shortcuts import render
-from .models import Recipe
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from .forms import RegisterForm
+from django.contrib.auth.forms import AuthenticationForm
+
+
 # Create your views here.
 def home(request):
     return render(request, 'index.html')
@@ -7,8 +12,35 @@ def about(request):
     return render(request,'about.html')
 def contact(request):
     return render(request,'contact.html')
-def booking(request):
-    return render(request,'booking.html')
+def userreg(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}!')
+            return redirect('userlogin')
+    else:
+        form = RegisterForm()
+    return render(request, 'userreg.html', {'form': form})
+
+def userlogin(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f'You are now logged in as {username}.')
+                return redirect('home')  # Redirect to your home page
+            else:
+                messages.error(request, 'Invalid username or password.')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    form = AuthenticationForm()
+    return render(request, 'userlogin.html', {'form': form})
 def menu(request):
     return render(request, 'menu.html')
 def service(request):
