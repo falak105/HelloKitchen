@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from .forms import RegisterForm
+from .forms import UserRegistrationForm, UserLoginForm
 from django.contrib.auth.forms import AuthenticationForm
 
 
@@ -14,33 +14,33 @@ def contact(request):
     return render(request,'contact.html')
 def userreg(request):
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}!')
-            return redirect('userlogin')
+            return redirect('user_login')
     else:
-        form = RegisterForm()
+        form = UserRegistrationForm()
     return render(request, 'userreg.html', {'form': form})
 
 def userlogin(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = UserLoginForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.info(request, f'You are now logged in as {username}.')
                 return redirect('home')  # Redirect to your home page
-            else:
-                messages.error(request, 'Invalid username or password.')
-        else:
-            messages.error(request, 'Invalid username or password.')
-    form = AuthenticationForm()
+    else:
+        form = UserLoginForm()
     return render(request, 'userlogin.html', {'form': form})
+
+# Logout View
+
+##@login_required
+###logout(request)
+    #return redirect('user_login')
 def menu(request):
     return render(request, 'menu.html')
 def service(request):
@@ -52,5 +52,4 @@ def testimonial(request):
 def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'kitchen_assistant/recipe_list.html', {'recipes': recipes})
-
 
