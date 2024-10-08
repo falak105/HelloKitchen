@@ -16,9 +16,11 @@
             <div class="container my-5 py-5">
                 <div class="row align-items-center g-5">
                     <div class="col-lg-6 text-center text-lg-start">
-                        <h1 class="display-3 text-white animated slideInLeft">Enjoy Our<br>Delicious Meal</h1>
-                        <p class="text-white animated slideInLeft mb-4 pb-2">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
-                        <a href="" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Voice</a>
+                        <h1 class="display-3 text-white animated slideInLeft">Smart Kitchen<br>Assistant</h1>
+                        <p class="text-white animated slideInLeft mb-4 pb-2">Just ask for a recipe, and it’ll dish out tasty ideas faster than you can say "What's for dinner?"
+
+                        </p>
+                        <a href="{% url 'userlogin' %}" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Ask me!</a>
                     </div>
                     <div class="col-lg-6 text-center text-lg-end overflow-hidden">
                         <img class="img-fluid" src="{% static 'img/bghero.png' %}" alt="">
@@ -131,7 +133,7 @@
             <div class="container">
                 <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                     <h5 class="section-title ff-secondary text-center text-primary fw-normal">Food Menu</h5>
-                    <h1 class="mb-5">Most Popular Items</h1>
+                    <h1 class="mb-5">Most Suggesions</h1>
                 </div>
                 <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.1s">
                     <ul class="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5">
@@ -484,41 +486,41 @@
                 <div class="col-md-6 bg-dark d-flex align-items-center">
                     <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
                         <h5 class="section-title ff-secondary text-start text-primary fw-normal">Reservation</h5>
-                        <h1 class="text-white mb-4">Book A Table Online</h1>
+                        <h1 class="text-white mb-4">Current Health</h1>
                         <form>
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="form-floating">
                                         <input type="text" class="form-control" id="name" placeholder="Your Name">
-                                        <label for="name">Your Name</label>
+                                        <label for="name">Weight</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
                                         <input type="email" class="form-control" id="email" placeholder="Your Email">
-                                        <label for="email">Your Email</label>
+                                        <label for="email">?????</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating date" id="date3" data-target-input="nearest">
                                         <input type="text" class="form-control datetimepicker-input" id="datetime" placeholder="Date & Time" data-target="#date3" data-toggle="datetimepicker" />
-                                        <label for="datetime">Date & Time</label>
+                                        <label for="datetime">Cals Burned this week</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
                                         <select class="form-select" id="select1">
-                                          <option value="1">People 1</option>
-                                          <option value="2">People 2</option>
-                                          <option value="3">People 3</option>
+                                          <option value="1">Exc 1</option>
+                                          <option value="2">Exc 2</option>
+                                          <option value="3">Exc 3</option>
                                         </select>
-                                        <label for="select1">No Of People</label>
+                                        <label for="select1">Exercises Done</label>
                                       </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <textarea class="form-control" placeholder="Special Request" id="message" style="height: 100px"></textarea>
-                                        <label for="message">Special Request</label>
+                                        <label for="message">Sugar Content</label>
                                     </div>
                                 </div>
                                 <div class="col-12">

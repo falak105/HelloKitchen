@@ -12,6 +12,8 @@ def about(request):
     return render(request,'about.html')
 def contact(request):
     return render(request,'contact.html')
+def chatbox(request):
+    return render(request,'chatbox.html')
 def userreg(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
