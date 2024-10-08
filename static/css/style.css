@@ -152,7 +152,7 @@
 
 /*** Hero Header ***/
 .hero-header {
-    background-image: url(../img/bghome.jpg);
+    background-image:  url("../img/bghome.jpg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
