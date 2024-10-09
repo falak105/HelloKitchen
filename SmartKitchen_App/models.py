@@ -38,3 +38,9 @@ class MealPlan(models.Model):
 
     def __str__(self):
         return f"Meal Plan for {self.user.name} on {self.date}"
+
+class member(models.Model):
+  Mname = models.CharField(max_length=255)
+  date = models.DateField()
+  weight = models.IntegerField()
+  calories = models.IntegerField()
