@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
@@ -12,7 +13,9 @@ def about(request):
 def contact(request):
     return render(request,'contact.html')
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'user/index.html')
+
+
 def userlogin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -26,7 +29,7 @@ def userlogin(request):
             return redirect(home)
         if user is None:
             msg = "Please check the credentials carefully!"
-            return render(request, 'dashboard.html', {'msg':msg})
+            return redirect('index')
     return render(request,"userlogin.html")
 
 def userreg(request):
@@ -41,7 +44,8 @@ def userreg(request):
             return render(request, 'userreg.html', {'msg': msg})
         if not User.objects.filter(username=username).exists():
             # Create the user with all required fields, including the password
-            user = User.objects.create_user(username=username, email=email, password=make_password(password))
+            user = User.objects.create(username=username, email=email)
+            user.set_password(password)  # Hash the password before saving the user
             user.save()
             return render(request, 'userlogin.html')
         else:
@@ -50,6 +54,9 @@ def userreg(request):
 
     return render(request, "userreg.html")
 
+def userlogout(request):
+    logout(request)
+    return redirect('userlogin')
 
 def menu(request):
     return render(request, 'menu.html')
@@ -62,4 +69,12 @@ def testimonial(request):
 def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'kitchen_assistant/recipe_list.html', {'recipes': recipes})
+def chatbox(request):
+    return render(request,'chatbox.html')
+# def dashboard(request):
+#     return render(request, 'user/index.html')
+# def notf(request):
+#     return render(request, 'user/notifications.html')
+# def profile(request):
+#     return render(request, 'user/user.html')
 

@@ -1,93 +1,130 @@
+{% extends 'base.html' %}
 {% load static %}
+
+{% block extrascript %}
+
+<!-- <link rel="stylesheet" href="{% static 'css/chatbox.css' %}"> -->
+
+{% endblock extrascript %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/chatbox.css' %}">
-    <title>Chatbox with Voice Assistant</title>
-</head>
-<body>
-    <div class="chatbox-container">
-        <div class="chatbox-header">
-            <h2>Smart Assistant</h2>
-        </div>
-        <div class="chatbox-body" id="chatbox-body">
-            <div class="chat-message bot-message">
-                <p>Hello! How can I assist you today?</p>
-            </div>
-        </div>
-        <div class="chatbox-footer">
-            <input type="text" id="chat-input" placeholder="Type your message..." />
-            <button id="send-btn" class="send-btn">Send</button>
-            <button id="voice-btn" class="voice-btn">
-                <i class="mic-icon"></i> <!-- Placeholder for mic icon -->
-            </button>
+<div class="chatbox-container">
+    <!-- <div class="chatbox-header">
+        <h2>Smart Assistant</h2>
+    </div>
+    <div class="chatbox-body" id="chatbox-body">
+        <div class="chat-message bot-message">
+            <p>Hello! How can I assist you today?</p>
+        </div> -->
+    </div>
+    <div class="container-xxl py-5 bg-dark hero-header mb-5">
+        <div class="container text-center my-5 pt-5 pb-4">
+            <h1 class="display-3 text-white mb-3 animated slideInDown">Your Voice Assistant</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center text-uppercase">
+                    <li class="breadcrumb-item"><a href="#">What will you like to have?? </a></li>
+                    <!-- <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">About</li> -->
+                </ol>
+            </nav>
         </div>
     </div>
+    <div class="chatbox-footer" align = "center">
+        <input type="text" id="chat-input" placeholder="Type your message..." />
+        <button id="send-btn" class="send-btn">Send</button>
+        <button id="voice-btn" class="voice-btn">
+            <i class="mic-icon"></i> <!-- Placeholder for mic icon -->
+        </button>
+    </div>
+</div>
 
-    <script>
+<!-- <h1>Speech Recognition and Response</h1> -->
+<button id="startButton" align="center">Start Recognition</button>
+<p id="transcript"></p>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
 
-        // Add your JavaScript functionality here for voice recognition and sending messages
-        import { createReadStream, writeFile } from 'fs';
-        import { createInterface } from 'readline';
-        import { exec } from 'child_process';
-        import { AudioContext } from 'web-audio-api';
+h1 {
+    text-align: center;
+    color: #333;
+}
 
-        // Simplified audio recording and storage function
-        async function recordAudio(filename) {
-        return new Promise((resolve, reject) => {
-            // Record audio and save it as the specified file
-            exec(`arecord -f S16_LE -r 16000 -d 5 ${filename}`, (error) => {
-            if (error) {
-                console.error(`Recording error: ${error}`);
-                reject(error);
-            } else {
-                console.log(`Audio recorded and saved to ${filename}`);
-                resolve(createReadStream(filename));
-            }
-            });
+button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px auto;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+#transcript {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #555;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+</style>
+<script>
+    // Check for browser support
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+        const transcriptElement = document.getElementById('transcript');
+        const startButton = document.getElementById('startButton');
+
+        // Set recognition parameters
+        recognition.continuous = false; // Stop after one recognition
+        recognition.interimResults = false; // No interim results
+
+        // Event listener for when recognition has results
+        recognition.onresult = function (event) {
+            const transcript = event.results[0][0].transcript;
+            transcriptElement.textContent = `You said: ${transcript}`;
+            respond(transcript);
+        };
+
+        // Event listener for errors
+        recognition.onerror = function (event) {
+            console.error('Speech recognition error', event.error);
+        };
+
+        // Start recognition on button click
+        startButton.addEventListener('click', () => {
+            recognition.start();
+            transcriptElement.textContent = "Listening...";
         });
+
+        // Function to respond using speech synthesis
+        function respond(message) {
+            const response = `You said: ${message}`;
+            const speech = new SpeechSynthesisUtterance(response);
+            window.speechSynthesis.speak(speech);
         }
+    } else {
+        alert('Speech recognition not supported in this browser.');
+    }
 
-        async function main() {
-        const rl = createInterface({
-            input: process.stdin,
-            output: process.stdout,
-        });
+</script>
 
-        while (true) {
-            console.log("Say 'kitchen' to start recording your question...");
-            await recordAudio('input.wav'); // Record initial keyword trigger audio
-
-            // Process the audio file to get the transcription (This function needs to be defined)
-            const transcription = await transcribeAudioToText('input.wav');
-            if (transcription.toLowerCase() === 'hey kitchen') {
-            console.log('Say your question...');
-            await recordAudio('question.wav'); // Record the question audio
-
-            // Transcribe and handle the question audio
-            const questionText = await transcribeAudioToText('question.wav');
-            if (questionText) {
-                console.log(`You said: ${questionText}`);
-
-                // Generate a response using GPT-3 (This function needs to be defined)
-                const response = await generateResponse(questionText);
-                console.log(`GPT-3 says: ${response}`);
-
-                // Read the response using text-to-speech (This function needs to be defined)
-                speakText(response);
-            }
-            }
-        }
-        }
-
-        // Ensure the main function handles errors gracefully
-        main().catch((err) => console.error('An Error occurred:', err));
-
-    </script>
-</body>
-</html>
 {% endblock content %}

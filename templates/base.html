@@ -16,7 +16,9 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&family=Pacifico&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -32,9 +34,14 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    {% block extrascript %}
+    {% endblock extrascript %}
 </head>
- <!-- Navbar & Hero Start -->
- <div class="container-xxl position-relative p-0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Navbar & Hero Start -->
+<div class="container-xxl position-relative p-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
         <a href="" class="navbar-brand p-0">
             <!-- <h1 class="text-primary m-0"><i class="fa fa-utensils me-3"></i>HelloKitchen</h1> -->
@@ -47,33 +54,56 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0 pe-4">
                 <a href="{% url 'index' %}" class="nav-item nav-link active">Home</a>
-                <a href="{% url 'about' %}" class="nav-item nav-link {% if request.path == '/about/' %}active{% endif %} ">About</a>
-                <a href="{% url 'service' %}" class="nav-item nav-link {% if request.path == '/service/' %}active{% endif %} ">Recipes</a>
-                <a href="{% url 'menu' %}" class="nav-item nav-link {% if request.path == '/menu/' %}active{% endif %} ">Meal Plan</a>
-                
-                <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}"
+                    class="nav-item nav-link {% if request.path == '/dashboard' %}active{% endif %} ">My Profile</a>
+                {% else %}
+                <a href="{% url 'about' %}"
+                    class="nav-item nav-link {% if request.path == '/about/' %}active{% endif %} ">About</a>
+                {% endif %}
+                <a href="{% url 'service' %}"
+                    class="nav-item nav-link {% if request.path == '/service/' %}active{% endif %} ">Recipes</a>
+                <a href="{% url 'menu' %}"
+                    class="nav-item nav-link {% if request.path == '/menu/' %}active{% endif %} ">Meal Plan</a>
+
+                <a href="{% url 'contact' %}"
+                    class="nav-item nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact</a>
+                {{user.username}}
             </div>
-            <div class="nav-item dropdown"><a href="" class="btn btn-primary py-2 px-4">Login</a>
+
+            <div class="nav-item dropdown">
+                {% if request.user.is_authenticated %}
+                <!-- Show logout button if the user is logged in -->
+                <a href="{% url 'userlogout' %}" class="btn btn-primary py-2 px-4">Logout</a>
+                {% else %}
+                <!-- Show login and registration options if the user is not logged in -->
+                <a href="{% url 'userlogin' %}" class="btn btn-primary py-2 px-4">Login</a>
+
                 <div class="nav-item dropdown">
                     <div class="dropdown-menu m-0">
-                        <a href="{% url 'login' %}" class="dropdown-item {% if request.path == '/login/' %}active{% endif %}">LogIn</a>
-                        <a href="{% url 'reg' %}" class="dropdown-item {% if request.path == '/reg/' %}active{% endif %}">Registration </a>
+                        <a href="{% url 'login' %}"
+                            class="dropdown-item {% if request.path == '/login/' %}active{% endif %}">LogIn</a>
+                        <a href="{% url 'reg' %}"
+                            class="dropdown-item {% if request.path == '/reg/' %}active{% endif %}">Registration</a>
                     </div>
                 </div>
+                {% endif %}
             </div>
-        
-        </div>
-    </nav>
 
-   
+        </div>
+
+</div>
+</nav>
+
+
 </div>
 <!-- Navbar & Hero End -->
 
 {% block content %}
 {% endblock content %}
 
-   <!-- Footer Start -->
-   <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+<!-- Footer Start -->
+<div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">
@@ -86,14 +116,21 @@
             </div>
             <div class="col-lg-3 col-md-6">
                 <h4 class="section-title ff-secondary text-start text-primary fw-normal mb-4">Contact</h4>
-                <a class="btn btn-link" href="https://lavasa.christuniversity.in/" ><i class="fa fa-map-marker-alt me-3"></i>Christ College Pune, Maharashtra, India</a>
-                <a class="btn btn-link" href="tel:+01234567890" ><i class="fa fa-phone-alt me-3"></i>+012 345 67890</a>
-                <a class="btn btn-link" href="mailto:smartkitchen@cac.com" ><i class="fa fa-envelope me-3"></i>smartkitchen@cac.com</a>
+                <a class="btn btn-link" href="https://lavasa.christuniversity.in/"><i
+                        class="fa fa-map-marker-alt me-3"></i>Christ College Pune, Maharashtra, India</a>
+                <a class="btn btn-link" href="tel:+01234567890"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</a>
+                <a class="btn btn-link" href="mailto:smartkitchen@cac.com"><i
+                        class="fa fa-envelope me-3"></i>smartkitchen@cac.com</a>
                 <div class="d-flex pt-2">
-                    <a class="btn btn-outline-light btn-social" href="https://x.com/i/flow/login?input_flow_data=%7B%22requested_variant%22%3A%22eyJteCI6IjIifQ%3D%3D%22%7D"><i class="fab fa-twitter"></i></a>
-                    <a class="btn btn-outline-light btn-social" href="https://www.facebook.com/login/"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-outline-light btn-social" href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
-                    <a class="btn btn-outline-light btn-social" href="https://www.linkedin.com/login"><i class="fab fa-linkedin-in"></i></a>
+                    <a class="btn btn-outline-light btn-social"
+                        href="https://x.com/i/flow/login?input_flow_data=%7B%22requested_variant%22%3A%22eyJteCI6IjIifQ%3D%3D%22%7D"><i
+                            class="fab fa-twitter"></i></a>
+                    <a class="btn btn-outline-light btn-social" href="https://www.facebook.com/login/"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-outline-light btn-social" href="https://www.youtube.com"><i
+                            class="fab fa-youtube"></i></a>
+                    <a class="btn btn-outline-light btn-social" href="https://www.linkedin.com/login"><i
+                            class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
@@ -107,8 +144,10 @@
                 <h4 class="section-title ff-secondary text-start text-primary fw-normal mb-4">Newsletter</h4>
                 <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
                 <div class="position-relative mx-auto" style="max-width: 400px;">
-                    <input class="form-control border-primary w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                    <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                    <input class="form-control border-primary w-100 py-3 ps-4 pe-5" type="text"
+                        placeholder="Your email">
+                    <button type="button"
+                        class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
                 </div>
             </div>
         </div>
@@ -118,8 +157,8 @@
             <div class="row">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
                     &copy; <a class="border-bottom" href="#">Smart Kitchen</a>, All Right Reserved, 2024.
-                    
-                    
+
+
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <div class="footer-menu">
@@ -156,5 +195,6 @@
 <script src="{% static 'js/main.js' %}"></script>
 
 </body>
+
 </html>
 {% endblock extrafooter %}

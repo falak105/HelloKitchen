@@ -20,7 +20,11 @@
                         <p class="text-white animated slideInLeft mb-4 pb-2">Just ask for a recipe, and it’ll dish out tasty ideas faster than you can say "What's for dinner?"
 
                         </p>
+                        {% if user.is_authenticated  %}
+                        <a href="{% url 'chatbox' %}" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Ask me!</a>
+                        {% else %}
                         <a href="{% url 'userlogin' %}" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Ask me!</a>
+                        {% endif %}
                     </div>
                     <div class="col-lg-6 text-center text-lg-end overflow-hidden">
                         <img class="img-fluid" src="{% static 'img/bghero.png' %}" alt="">
