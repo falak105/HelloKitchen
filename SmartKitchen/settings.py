@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'SmartKitchen_App',
-    'crispy_forms',
+    
 ]
 
 MIDDLEWARE = [
@@ -131,3 +131,8 @@ LOGIN_URL = 'user_login'
 LOGIN_REDIRECT_URL = 'home'  # Redirect to the homepage after login
 LOGOUT_REDIRECT_URL = 'userlogin'  # Redirect to the login page after logout
 
+# Redirect users after login
+# LOGIN_REDIRECT_URL = '/'
+
+# Redirect users after logout
+# LOGOUT_REDIRECT_URL = '/'
