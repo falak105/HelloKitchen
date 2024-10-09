@@ -27,7 +27,7 @@ def userlogin(request):
             return redirect(home)
         if user is None:
             msg = "Please check the credentials carefully!"
-            return render(request, 'userlogin.html', {'msg':msg})
+            return render(request, 'dashboard.html', {'msg':msg})
     return render(request,"userlogin.html")
 
 def userreg(request):
