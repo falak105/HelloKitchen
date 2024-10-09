@@ -56,8 +56,8 @@
             <div class="nav-item dropdown"><a href="" class="btn btn-primary py-2 px-4">Login</a>
                 <div class="nav-item dropdown">
                     <div class="dropdown-menu m-0">
-                        <a href="{% url 'userlogin' %}" class="dropdown-item {% if request.path == '/userlogin/' %}active{% endif %}">LogIn</a>
-                        <a href="{% url 'userreg' %}" class="dropdown-item {% if request.path == '/userreg/' %}active{% endif %}">Registration </a>
+                        <a href="{% url 'login' %}" class="dropdown-item {% if request.path == '/login/' %}active{% endif %}">LogIn</a>
+                        <a href="{% url 'reg' %}" class="dropdown-item {% if request.path == '/reg/' %}active{% endif %}">Registration </a>
                     </div>
                 </div>
             </div>
