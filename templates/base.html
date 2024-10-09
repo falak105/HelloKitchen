@@ -48,8 +48,8 @@
             <div class="navbar-nav ms-auto py-0 pe-4">
                 <a href="{% url 'index' %}" class="nav-item nav-link active">Home</a>
                 <a href="{% url 'about' %}" class="nav-item nav-link {% if request.path == '/about/' %}active{% endif %} ">About</a>
-                <a href="{% url 'service' %}" class="nav-item nav-link {% if request.path == '/service/' %}active{% endif %} ">Service</a>
-                <a href="{% url 'menu' %}" class="nav-item nav-link {% if request.path == '/menu/' %}active{% endif %} ">Menu</a>
+                <a href="{% url 'service' %}" class="nav-item nav-link {% if request.path == '/service/' %}active{% endif %} ">Recipes</a>
+                <a href="{% url 'menu' %}" class="nav-item nav-link {% if request.path == '/menu/' %}active{% endif %} ">Meal Plan</a>
                 
                 <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.path == '/contact/' %}active{% endif %}">Contact</a>
             </div>
