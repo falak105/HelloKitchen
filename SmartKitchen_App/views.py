@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 
-
 # Create your views here.
 def home(request):
     return render(request, 'index.html')
@@ -40,7 +39,6 @@ def userreg(request):
         if not username:
             msg = "Username cannot be empty."
             return render(request, 'userreg.html', {'msg': msg})
-
         if not User.objects.filter(username=username).exists():
             # Create the user with all required fields, including the password
             user = User.objects.create_user(username=username, email=email, password=make_password(password))
