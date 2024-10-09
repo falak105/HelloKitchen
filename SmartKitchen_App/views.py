@@ -16,7 +16,7 @@ def dashboard(request):
     return render(request, 'user/index.html')
 
 
-def userlogin(request):
+def userlogin(request): 
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -69,8 +69,8 @@ def testimonial(request):
 def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'kitchen_assistant/recipe_list.html', {'recipes': recipes})
-def chatbox(request):
-    return render(request,'chatbox.html')
+def vassi(request):
+    return render(request,'voiceassistant.html')
 # def dashboard(request):
 #     return render(request, 'user/index.html')
 # def notf(request):

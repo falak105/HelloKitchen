@@ -21,7 +21,7 @@
 
                         </p>
                         {% if user.is_authenticated  %}
-                        <a href="{% url 'chatbox' %}" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Ask me!</a>
+                        <a href="{% url 'voiceassistant' %}" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Ask me!</a>
                         {% else %}
                         <a href="{% url 'userlogin' %}" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Ask me!</a>
                         {% endif %}

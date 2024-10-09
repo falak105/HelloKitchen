@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  home,about,contact,userlogin,userreg,menu,service,team,testimonial,recipe_list,dashboard,userlogout,chatbox
+from .views import  home,about,contact,userlogin,userreg,menu,service,team,testimonial,recipe_list,dashboard,userlogout,vassi
 from django.contrib.auth import views as auth_views
 
 
@@ -19,7 +19,7 @@ urlpatterns = [
     path('service/',service, name='service'),
     path('recipes/', recipe_list, name='recipe_list'),
     path('dashboard/',dashboard, name='dashboard'),
-    path('chatbox/',chatbox, name='chatbox'),
+    path('vassi/',vassi, name='voiceassistant'),
     # path('notifications/',notf, name='notf'),
     # path('profile/',profile,name='profile'),
 ]

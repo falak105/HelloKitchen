@@ -1,0 +1,149 @@
+{% load static %}
+{% block extrascript %}
+{% endblock extrascript %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition Chat Box</title>
+    <!-- <link rel="stylesheet" href="chat-style.css"> -->
+     <style>
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    width: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #4A90E2;
+    font-size: 24px;
+}
+
+button {
+    background-color: #4A90E2;
+    border: none;
+    color: white;
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 20px;
+    display: block;
+    margin: 20px auto;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #357ABD;
+}
+
+.chat-box {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-message, .bot-message {
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-size: 16px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.user-message {
+    background-color: #DCF8C6;
+    align-self: flex-end;
+    color: #333;
+}
+
+.bot-message {
+    background-color: #E1E1E1;
+    align-self: flex-start;
+    color: #333;
+}
+
+#transcript {
+    display: none; /* Hidden, chat bubbles handle the display */
+}
+
+     </style>
+     
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Chat with Voice</h1>
+        <button id="startButton">🎤 Start Talking</button>
+        <div class="chat-box" id="chatBox"></div>
+    </div>
+    <script>
+        // Check for browser support
+if ('webkitSpeechRecognition' in window) {
+    const recognition = new webkitSpeechRecognition();
+    const startButton = document.getElementById('startButton');
+    const chatBox = document.getElementById('chatBox');
+
+    // Set recognition parameters
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    // When recognition has results
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        displayMessage('user', transcript);
+        respond(transcript);
+    };
+
+    // Handle errors
+    recognition.onerror = function(event) {
+        console.error('Speech recognition error', event.error);
+    };
+
+    // Start recognition on button click
+    startButton.addEventListener('click', () => {
+        recognition.start();
+        displayMessage('bot', "I'm listening...");
+    });
+
+    // Display chat bubbles
+    function displayMessage(sender, message) {
+        const messageBubble = document.createElement('div');
+        messageBubble.className = sender === 'user' ? 'user-message' : 'bot-message';
+        messageBubble.textContent = message;
+        chatBox.appendChild(messageBubble);
+        chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the latest message
+    }
+
+    // Function to respond using speech synthesis
+    function respond(message) {
+        const response = `You said: ${message}`;
+        displayMessage('bot', response);
+        const speech = new SpeechSynthesisUtterance(response);
+        window.speechSynthesis.speak(speech);
+    }
+} else {
+    alert('Speech recognition not supported in this browser.');
+}
+
+     </script>
+    <!-- <script src="script.js"></script> -->
+</body>
+</html>
+{% endblock content %}
