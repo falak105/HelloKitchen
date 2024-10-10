@@ -86,7 +86,7 @@ button:hover {
 }
 
 </style>
-<script>
+<!-- <script>
     // Check for browser support
     if ('webkitSpeechRecognition' in window) {
         const recognition = new webkitSpeechRecognition();
@@ -124,7 +124,66 @@ button:hover {
     } else {
         alert('Speech recognition not supported in this browser.');
     }
+******************************
+    // Check for browser support for Web Speech API
+if ('webkitSpeechRecognition' in window) {
+    const recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    const startButton = document.getElementById('startButton');
+    const responseElement = document.getElementById('response');
 
-</script>
+    // Start recognition when button is clicked
+    startButton.addEventListener('click', () => {
+        recognition.start();
+        responseElement.textContent = "Listening...";
+    });
+
+    // When speech recognition has results
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        responseElement.textContent = `You said: ${transcript}`;
+        sendToServer(transcript);  // Send recognized speech to backend
+    };
+
+    // Function to send speech to server and fetch the response
+    function sendToServer(speechText) {
+        fetch('/query', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ speech: speechText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display and speak the response from the server
+            responseElement.textContent = `Response: ${data.response}`;
+            speakResponse(data.response);
+        })
+        .catch(error => {
+            responseElement.textContent = "Error fetching response.";
+            console.error('Error:', error);
+        });
+    }
+
+    // Function to use Web Audio API for speech synthesis
+    function speakResponse(text) {
+        const speech = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(speech);
+    }
+
+    // Handle recognition errors
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        responseElement.textContent = 'Error recognizing speech.';
+    };
+
+} else {
+    alert('Speech recognition is not supported in this browser.');
+}
+
+</script> -->
+
 
 {% endblock content %}

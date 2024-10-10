@@ -22,7 +22,7 @@
     height: 100vh;
 }
 
-.chat-container {
+.chat-box {
     width: 400px;
     background-color: #fff;
     border-radius: 10px;
@@ -88,60 +88,131 @@ button:hover {
      
 </head>
 <body>
-    <div class="chat-container">
+    <div class="container">
         <h1>Chat with Voice</h1>
         <button id="startButton">🎤 Start Talking</button>
-        <div class="chat-box" id="chatBox"></div>
+        <div class="chat-box" id="output"></div>
     </div>
+    
     <script>
         // Check for browser support
+// if ('webkitSpeechRecognition' in window) {
+//     const recognition = new webkitSpeechRecognition();
+//     const startButton = document.getElementById('startButton');
+//     const chatBox = document.getElementById('chatBox');
+
+//     // Set recognition parameters
+//     recognition.continuous = false;
+//     recognition.interimResults = false;
+
+//     // When recognition has results
+//     recognition.onresult = function(event) {
+//         const transcript = event.results[0][0].transcript;
+//         displayMessage('user', transcript);
+//         respond(transcript);
+//     };
+
+//     // Handle errors
+//     recognition.onerror = function(event) {
+//         console.error('Speech recognition error', event.error);
+//     };
+
+//     // Start recognition on button click
+//     startButton.addEventListener('click', () => {
+//         recognition.start();
+//         displayMessage('bot', "I'm listening...");
+//     });
+
+//     // Display chat bubbles
+//     function displayMessage(sender, message) {
+//         const messageBubble = document.createElement('div');
+//         messageBubble.className = sender === 'user' ? 'user-message' : 'bot-message';
+//         messageBubble.textContent = message;
+//         chatBox.appendChild(messageBubble);
+//         chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the latest message
+//     }
+
+//     // Function to respond using speech synthesis
+//     function respond(message) {
+//         const response = `You said: ${message}`;
+//         displayMessage('bot', response);
+//         const speech = new SpeechSynthesisUtterance(response);
+//         window.speechSynthesis.speak(speech);
+//     }
+// } else {
+//     alert('Speech recognition not supported in this browser.');
+//}
+
+
+// Dataset (can be JSON or a JS object)
+const dataset = {
+    "hello": "Hi there! How can I help you today?",
+    "weather": "The weather is sunny and warm today.",
+    "your name": "I am your personal voice assistant.",
+    "time": "I am not sure about the exact time, but you can always check your watch.",
+    "dinner":"take a peice of morinja porotta and wrap it with the fried and hot saucaged beaf peice and have it like yum yum ...sweet!!",
+    "breakfast":"masala dosha and sambar or idli vada sambar or chole bhattura  ",
+    "lunch":"hot rice with chaala meen curry along with this we will have some yellow mooru with katta thyru and aviyal also with payar or vendakka thoran and i didn't forget about the spicy chicken curry yummy yummy!"
+};
+
+// Check for browser support for Web Speech API
 if ('webkitSpeechRecognition' in window) {
     const recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;  // Stops after speaking
+    recognition.interimResults = false;  // Return final result only
+
     const startButton = document.getElementById('startButton');
+    const outputElement = document.getElementById('output');
     const chatBox = document.getElementById('chatBox');
 
-    // Set recognition parameters
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    // When recognition has results
-    recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        displayMessage('user', transcript);
-        respond(transcript);
-    };
-
-    // Handle errors
-    recognition.onerror = function(event) {
-        console.error('Speech recognition error', event.error);
-    };
-
-    // Start recognition on button click
+    // Start recognition when button is clicked
     startButton.addEventListener('click', () => {
         recognition.start();
-        displayMessage('bot', "I'm listening...");
+        outputElement.textContent = "Listening...";
     });
 
-    // Display chat bubbles
-    function displayMessage(sender, message) {
-        const messageBubble = document.createElement('div');
-        messageBubble.className = sender === 'user' ? 'user-message' : 'bot-message';
-        messageBubble.textContent = message;
-        chatBox.appendChild(messageBubble);
-        chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the latest message
+    // When speech recognition has results
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toLowerCase().trim();  // Convert to lowercase and trim spaces
+        outputElement.textContent = `You said: "${transcript}"`;
+        processSpeech(transcript);
+    };
+
+    // Function to process the recognized speech and find a response from the dataset
+    function processSpeech(transcript) {
+        let response;
+
+        // Check if the transcript exists in the dataset
+        if (dataset[transcript]) {
+            response = dataset[transcript];
+        } else {
+            response = "Sorry, I didn't understand that.";
+        }
+
+        // Show the response on the screen
+        outputElement.textContent = `Response: ${response}`;
+
+        // Speak the response using the Web Audio API (Speech Synthesis)
+        speakResponse(response);
     }
 
-    // Function to respond using speech synthesis
-    function respond(message) {
-        const response = `You said: ${message}`;
-        displayMessage('bot', response);
-        const speech = new SpeechSynthesisUtterance(response);
+    // Function to use Web Audio API for speech synthesis (speech-to-text)
+    function speakResponse(text) {
+        const speech = new SpeechSynthesisUtterance(text);
         window.speechSynthesis.speak(speech);
     }
+
+    // Handle recognition errors
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        outputElement.textContent = 'Error recognizing speech.';
+    };
+
 } else {
-    alert('Speech recognition not supported in this browser.');
+    alert('Speech recognition is not supported in this browser.');
 }
 
+</script>
      </script>
     <!-- <script src="script.js"></script> -->
 </body>

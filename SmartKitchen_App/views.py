@@ -4,6 +4,10 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
+from django.http import JsonResponse
+from .models import Response
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Create your views here.
 def home(request):
@@ -48,7 +52,7 @@ def userreg(request):
             user.set_password(password)  # Hash the password before saving the user
             user.save()
             return render(request, 'userlogin.html')
-        else:
+        else: 
             msg = "Username already exists. Try again!"
             return render(request, 'userreg.html', {'msg': msg})
 
@@ -78,3 +82,21 @@ def vassi(request):
 # def profile(request):
 #     return render(request, 'user/user.html')
 
+# handle to speech queries
+@csrf_exempt  # Temporarily disable CSRF for simplicity
+def get_response(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            speech_text = data.get('speech', '')
+
+            # Query the database to find a matching question
+            response = Response.objects.filter(question__icontains=speech_text).first()
+
+            if response:
+                return JsonResponse({'response': response.response})
+            else:
+                return JsonResponse({'response': "Sorry, I don't have an answer for that."})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid input'}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

@@ -44,3 +44,11 @@ class member(models.Model):
   date = models.DateField()
   weight = models.IntegerField()
   calories = models.IntegerField()
+
+
+class Response(models.Model):
+    question = models.CharField(max_length=255)
+    response = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.question
