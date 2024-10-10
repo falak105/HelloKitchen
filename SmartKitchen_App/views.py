@@ -20,21 +20,28 @@ def dashboard(request):
     return render(request, 'user/index.html')
 
 
-def userlogin(request): 
+def userlogin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
+
         print(username)
         print(password)
         print(user)
+
         if user is not None and user.is_active:
             login(request, user)
-            return redirect(home)
-        if user is None:
+            # Check if the user is a super admin (superuser)
+            if user.is_superuser:
+                return redirect('admin_dashboard')  # Redirect to super admin dashboard
+            else:
+                return redirect('index')  # Redirect to user home
+        else:
             msg = "Please check the credentials carefully!"
-            return redirect('index')
-    return render(request,"userlogin.html")
+            return render(request, 'userlogin.html', {'msg': msg})
+
+    return render(request, "userlogin.html")
 
 def userreg(request):
     if request.method == "POST":
@@ -46,6 +53,8 @@ def userreg(request):
         if not username:
             msg = "Username cannot be empty."
             return render(request, 'userreg.html', {'msg': msg})
+
+        # Check if the username already exists
         if not User.objects.filter(username=username).exists():
             # Create the user with all required fields, including the password
             user = User.objects.create(username=username, email=email)
@@ -58,9 +67,16 @@ def userreg(request):
 
     return render(request, "userreg.html")
 
+
 def userlogout(request):
     logout(request)
     return redirect('userlogin')
+
+def userdashboard(request):
+    return render(request,'user_dashboard.html')
+def adminashboard(request):
+    return render(request,'admin/admin_dashboard.html')
+                  
 
 def menu(request):
     return render(request, 'menu.html')

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  home,about,contact,userlogin,userreg,menu,service,team,testimonial,recipe_list,dashboard,userlogout,vassi
+from .views import  *
 from django.contrib.auth import views as auth_views
 
 
@@ -11,6 +11,8 @@ urlpatterns = [
     path('userreg/',userreg, name='userreg'),
     path('login/', auth_views.LoginView.as_view(template_name='userlogin.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    path('userdashboard/',userdashboard, name='user_dashboard'),
+    path('admindashboard/',adminashboard, name='admin_dashboard'),
     path('about/',about, name='about'),
     path('contact/',contact, name='contact'),
     path('userlogin/',userlogin, name='login'),

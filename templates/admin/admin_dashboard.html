@@ -1,4 +1,4 @@
-{% extends 'bases/userbase.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
 
@@ -28,6 +28,7 @@
         }
 
         .sidebar {
+            height: 800px;
             width: 250px;
             background: rgba(41, 41, 41, 0.9);
             padding: 20px;
@@ -36,8 +37,10 @@
 
         .sidebar h2 {
             color: #ffae00;
+            margin-top: 50px;
             margin-bottom: 30px;
             text-align: center;
+            font-size: 28px;
         }
 
         .sidebar ul {
@@ -70,7 +73,8 @@
         }
 
         header h1 {
-            font-size: 36px;
+            margin-top: 50px;
+            font-size: 28px;
             font-weight: 600;
             color: #ffae00;
             margin-bottom: 20px;
@@ -130,14 +134,7 @@
             font-size: 18px;
         }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: rgba(41, 41, 41, 0.8);
-            color: #bbb;
-            margin-top: 50px;
-            border-radius: 10px;
-        }
+        
     </style>
 </head>
 <body>
