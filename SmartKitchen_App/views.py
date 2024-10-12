@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
-from .models import Response
+from .models import Recipe
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -86,9 +86,33 @@ def team(request):
     return render(request, 'team.html')
 def testimonial(request):
     return render(request, 'testimonial.html')
-def recipe_list(request):
-    recipes = Recipe.objects.all()
-    return render(request, 'kitchen_assistant/recipe_list.html', {'recipes': recipes})
+
+
+
+def create_recipe(request):
+    if request.method == 'POST':
+        recipe_name = request.POST.get('name')
+        recipe_category = request.POST.get('category')
+        ingredients = request.POST.get('ingredients')
+        instructions = request.POST.get('instructions')
+        prep_time = request.POST.get('prep_time')
+        cook_time = request.POST.get('cook_time')
+        
+        # Save data to the Recipe model
+        add_recipe = Recipe.objects.create(
+            r_name=recipe_name,
+            category=recipe_category,
+            ingridents=ingredients,
+            instructions=instructions,
+            prep_time=prep_time,
+            cooking_time=cook_time
+        )
+
+        add_recipe.save()
+        return redirect('recipe')  # Redirect to a success page
+    
+    return render(request, 'admin/recipe.html')
+
 def vassi(request):
     return render(request,'voiceassistant.html')
 # def dashboard(request):
