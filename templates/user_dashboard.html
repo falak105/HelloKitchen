@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Smart Kitchen Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body{
+         background-image: url(/static/img/bg_log.png);
+         background-repeat: no-repeat;
+         background-position: 100%;
+         background-size: cover;
+    }
+        .user-dashboard {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            height: 800px;
+            width: 250px;
+            background: rgba(41, 41, 41, 0.8);
+            padding: 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar h2 {
+            color: #ffae00;
+            margin-bottom: 30px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px;
+            display: block;
+            background: rgba(255, 174, 0, 0.8);
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #d98e00;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+        }
+
+        header h1 {
+            margin-top: 80px;
+            font-size: 36px;
+            font-weight: 600;
+            color: #ffae00;
+            
+        }
+       
+
+        .overview {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: rgba(51, 51, 51, 0.8);
+            border-radius: 10px;
+            padding: 30px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ffae00;
+        }
+
+        .card p {
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        .recent-recipes {
+            margin-top: 50px;
+        }
+
+        .recent-recipes h2 {
+            font-size: 28px;
+            color: #ffae00;
+            margin-bottom: 20px;
+        }
+
+        .recipe-cards {
+            display: flex;
+            gap: 20px;
+        }
+
+        .recipe-card {
+            background: rgba(51, 51, 51, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .recipe-card h3 {
+            color: #fff;
+            font-size: 18px;
+        }
+
+      
+    </style>
+</head>
+<body>
+    <div class="user-dashboard">
+        <aside class="sidebar">
+            <h2>User Panel</h2>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">My Recipes</a></li>
+                <li><a href="#">Meal Planner</a></li>
+                <li><a href="#">Shopping List</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <header>
+                <h1>User Dashboard</h1>
+                <p>Welcome to your personalized Smart Kitchen Assistant</p>
+            </header>
+            <section class="overview">
+                <div class="card">
+                    <h3>Total Recipes Saved</h3>
+                    <p>35</p>
+                </div>
+                <div class="card">
+                    <h3>Planned Meals</h3>
+                    <p>5</p>
+                </div>
+                <div class="card">
+                    <h3>Shopping List Items</h3>
+                    <p>10</p>
+                </div>
+            </section>
+            <section class="recent-recipes">
+                <h2>Recently Viewed Recipes</h2>
+                <div class="recipe-cards">
+                    <div class="recipe-card">
+                        <h3>Spaghetti Carbonara</h3>
+                        <p>Viewed on Oct 5, 2024</p>
+                    </div>
+                    <div class="recipe-card">
+                        <h3>Avocado Toast</h3>
+                        <p>Viewed on Oct 4, 2024</p>
+                    </div>
+                    <div class="recipe-card">
+                        <h3>Grilled Chicken Salad</h3>
+                        <p>Viewed on Oct 3, 2024</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+{% endblock content %}
