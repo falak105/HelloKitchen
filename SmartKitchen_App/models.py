@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
-
-class Recipe(models.Model):
+class recipe(models.Model):
     r_name = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
     ingridents = models.CharField(max_length=255)
@@ -57,3 +58,21 @@ class Response(models.Model):
 
     def __str__(self):
         return self.question
+    
+# class CustomUser(AbstractUser):
+#     # Add unique related_names to avoid clashes with the auth.User model
+#     groups = models.ManyToManyField(
+#         Group,
+#         related_name='customuser_set',  # Ensure the related name is unique
+#         blank=True,
+#         help_text="The groups this user belongs to.",
+#         verbose_name="groups",
+#     )
+    
+#     user_permissions = models.ManyToManyField(
+#         Permission,
+#         related_name='customuser_permissions_set',  # Ensure the related name is unique
+#         blank=True,
+#         help_text="Specific permissions for this user.",
+#         verbose_name="user permissions",
+#     )

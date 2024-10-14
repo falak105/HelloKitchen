@@ -1,4 +1,3 @@
-
 {% load static %}
 
 <head>
@@ -13,13 +12,14 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        body{
-         background-image: url(/static/img/bg_log.png);
-         background-repeat: no-repeat;
-         background-position: 100%;
-         background-size: cover;
-    }
-    .admin-dashboard {
+        body {
+            background-image: url(/static/img/bg_log.png);
+            background-repeat: no-repeat;
+            background-position: 100%;
+            background-size: cover;
+        }
+
+        .admin-dashboard {
             display: flex;
             height: 100vh;
         }
@@ -64,11 +64,10 @@
             background-color: #d98e00;
         }
 
-
         .container {
             width: 100%;
             max-width: 800px;
-            height: 750px;
+            height: auto; /* Change to auto for better flexibility */
             margin: 50px auto;
             padding: 40px;
             background: rgba(41, 41, 41, 0.8);
@@ -81,7 +80,6 @@
             margin-bottom: 30px;
             color: #ffae00;
         }
-        
 
         form {
             display: flex;
@@ -105,8 +103,6 @@
             font-size: 14px;
             width: 100%;
         }
-        
-         
 
         textarea {
             height: 150px;
@@ -118,7 +114,7 @@
         }
 
         input::placeholder, textarea::placeholder {
-            color: #ffae00;;
+            color: #ffae00;
         }
 
         button {
@@ -146,6 +142,13 @@
         .form-group div {
             flex: 1;
         }
+
+        .error-message {
+            color: red;
+            margin-top: -15px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -153,7 +156,7 @@
         <aside class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
-                <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'admindashboard' %}">Dashboard</a></li>
                 <li><a href="{% url 'recipe' %}">Manage Recipes</a></li>
                 <li><a href="#">User Management</a></li>
                 <li><a href="#">Statistics</a></li>
@@ -161,48 +164,56 @@
                 <li><a href="#">Logout</a></li>
             </ul>
         </aside>
-    <div class="container">
-        <h1>Add a New Recipe</h1>
-        <form  method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <div>
-                    <label for="recipe-name">Recipe Name</label>
-                    <input type="text" id="recipe-name" name="name" placeholder="Enter recipe name" required>
+        <div class="container">
+            <h1>Add a New Recipe</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div>
+                        <label for="recipe-name">Recipe Name</label>
+                        <input type="text" id="recipe-name" name="name" placeholder="Enter recipe name" required>
+                        {% if form.errors.name %}
+                            <div class="error-message">{{ form.errors.name }}</div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="recipe-category">Category</label>
+                        <select id="recipe-category" name="category" required>
+                            <option value="" disabled selected>Select category</option>
+                            <option value="Breakfast">Breakfast</option>
+                            <option value="Lunch">Lunch</option>
+                            <option value="Dinner">Dinner</option>
+                            <option value="Dessert">Dessert</option>
+                            <option value="Snack">Snack</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label for="recipe_category">Category</label>
-                    <select id="recipe-category" name="category" required>
-                        <option value="" disabled selected>Select category</option>
-                        <option value="Breakfast">Breakfast</option>
-                        <option value="Lunch">Lunch</option>
-                        <option value="Dinner">Dinner</option>
-                        <option value="Dessert">Dessert</option>
-                        <option value="Snack">Snack</option>
-                    </select>
+
+                <label for="ingredients">Ingredients</label>
+                <textarea id="ingredients" name="ingredients" placeholder="List ingredients..." required></textarea>
+                {% if form.errors.ingredients %}
+                    <div class="error-message">{{ form.errors.ingredients }}</div>
+                {% endif %}
+
+                <label for="instructions">Instructions</label>
+                <textarea id="instructions" name="instructions" placeholder="Enter cooking steps..." required></textarea>
+                {% if form.errors.instructions %}
+                    <div class="error-message">{{ form.errors.instructions }}</div>
+                {% endif %}
+
+                <div class="form-group">
+                    <div>
+                        <label for="prep-time">Preparation Time (mins)</label>
+                        <input type="number" id="prep-time" name="prep_time" placeholder="e.g. 20" required>
+                    </div>
+                    <div>
+                        <label for="cook-time">Cooking Time (mins)</label>
+                        <input type="number" id="cook-time" name="cook_time" placeholder="e.g. 30" required>
+                    </div>
                 </div>
-            </div>
 
-            <label for="ingredients">Ingredients</label>
-            <textarea id="ingredients" name="ingredients" placeholder="List ingredients..." required></textarea>
-
-            <label for="instructions">Instructions</label>
-            <textarea id="instructions" name="instructions" placeholder="Enter cooking steps..." required></textarea>
-
-            <div class="form-group">
-                <div>
-                    <label for="prep-time">Preparation Time (mins)</label>
-                    <input type="number" id="prep-time" name="prep_time" placeholder="e.g. 20" required>
-                </div>
-                <div>
-                    <label for="cook-time">Cooking Time (mins)</label>
-                    <input type="number" id="cook-time" name="cook_time" placeholder="e.g. 30" required>
-                </div>
-            </div>
-
-            <button type="submit">Add Recipe</button>
-        </form>
-
+                <button type="submit">Add Recipe</button>
+            </form>
+        </div>
     </div>
 </body>
-

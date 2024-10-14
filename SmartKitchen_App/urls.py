@@ -21,14 +21,19 @@ urlpatterns = [
     path('userreg/',userreg, name='reg'),
     path('menu/',menu, name='menu'),
     path('service/',service, name='service'),
-    path('recipe/', Recipe, name='recipe'),
+    path('recipe/', create_recipe, name='recipe'),
     path('dashboard/',dashboard, name='dashboard'),
     path('vassi/',vassi, name='voiceassistant'),
     path('health_analysis/',health_analysis, name='health_analysis'),
     path('health/', health_analysis_report, name='health_analysis_report'),
     path('admin/', admin.site.urls),
     path('query/', views.get_response, name='get_response'),  # Add this line
-
+    path('users/', views.user_list, name='user_list'),
+    path('users/add/', views.add_user, name='add_user'),
+    path('usermanagement/',usermanagement, name='usermanagement'),
+    path('users/<int:id>/edit/', views.edit_user, name='edit_user'),
+    path('users/<int:id>/delete/', views.delete_user, name='delete_user'),
+  
     # path('notifications/',notf, name='notf'),
     # path('profile/',profile,name='profile'),
 ]

@@ -79,7 +79,7 @@
 
             <div class="container-xxl py-5 bg-dark hero-header mb-5">
                 <div class="container text-center my-5 pt-5 pb-4">
-                    <h1 class="display-3 text-white mb-3 animated slideInDown">Recipes</h1>
+                    <h1 class="display-3 text-white mb-3 animated slideInDown">Meal Plan</h1>
                     <nav aria-label="breadcrumb">
                         
                     </nav>
@@ -93,16 +93,19 @@
         <div class="container-xxl py-5">
             <div class="container">
                 <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h5 class="section-title ff-secondary text-center text-primary fw-normal">Recipes Services</h5>
-                    <h1 class="mb-5">Explore Our Recipes</h1>
+                    <h5 class="section-title ff-secondary text-center text-primary fw-normal">Meal Plans</h5>
+                    <h1 class="mb-5">Explore your meal plans</h1>
                 </div>
                 <div class="row g-4">
                     <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="service-item rounded pt-3">
                             <div class="p-4">
                                 <i class="fa fa-3x fa-user-tie text-primary mb-4"></i>
-                                <h5>Master Chefs</h5>
-                                <p>You can find the recipes of famous chefs here.</p>
+                                <h5>Morning Snacks</h5>
+                                <p>Chai and Buiscets</p>
+                                <button class="btn btn-outline-primary mt-3">
+                                    <i class="fa fa-undo"></i> RePlan
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -113,6 +116,9 @@
                                  <i class="fa fa-3x fas fa-coffee text-primary mb-4"></i>
                                 <h5>Break Fast</h5>
                                 <p>You can choose the break fast recipes here.</p>
+                                <button class="btn btn-outline-primary mt-3">
+                                    <i class="fa fa-undo"></i> RePlan
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -122,6 +128,9 @@
                                 <i class="fa fa-3x fa-utensils text-primary mb-4"></i>
                                 <h5>Meals</h5>
                                 <p>Here You can find meal recipes. </p>
+                                <button class="btn btn-outline-primary mt-3">
+                                    <i class="fa fa-undo"></i> RePlan
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -131,6 +140,9 @@
                                 <i class="fa fa-3x fas fa-drumstick-bite text-primary mb-4"></i>
                                 <h5>Evening and Dinner</h5>
                                 <p>Recipes for eveining snacks and dinner.</p>
+                                <button class="btn btn-outline-primary mt-3">
+                                    <i class="fa fa-undo"></i> RePlan
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -164,10 +176,73 @@
                     
 
         <!-- Service End -->
+        <div class="col-md-6 bg-dark d-flex align-items-center">
+            <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
+                <h5 class="section-title ff-secondary text-start text-primary fw-normal">Meal Plan</h5>
+                <h1 class="text-white mb-4">Plan Your Meal here</h1>
+                <form method="POST" action="{% url 'health_analysis' %}">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <!-- breakfast -->
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="weight"  name="weight" placeholder="Your Weight">
+                                <label for="weight" name="weight">Breakfast</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Lunch -->
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="height" name="height" placeholder="Your Height">
+                                <label for="height" name="height">Lunch</label>
+                            </div>
+                        </div>
+
+                        <!-- Dinner -->
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="height" name="height" placeholder="Your Height">
+                                <label for="height" name="height">Dinner</label>
+                            </div>
+                        </div>
         
+                        <!-- Time -->
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <select class="form-select" id="health_issues" name="health_issues" onchange="toggleOtherHealthIssue()">
+                                    <option value="" disabled selected>Set your reminder</option>
+                                    <option value="Before 1hr of food">Before 1hr of food</option>
+                                    <option value="Before 45 mins of food">Before 45 mins of food</option>
+                                    <option value="Before 30 mins of food">Before 30 mins of food</option>
+                                    <option value="Before 15 mins of food">Before 15 mins of food</option>
+                                    <option value="Before 5 mins of food">Before 5 mins of food</option>
+                                    
+                                </select>
+                                <label for="health_issues" name="health_issues">Common Timeings</label>
+                            </div>
+                        </div>
+        
+                        <!-- If "Other" is selected, this input field will show -->
+                        <div class="col-12" id="other-health-issue-div" style="display:none;">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="other_health_issue" name="other_health_issue" placeholder="Specify Health Issue">
+                                <label for="other_health_issue">Specify Meal Plan</label>
+                            </div>
+                        </div>
+        
+                        <!-- Submit Button -->
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100 py-3" type="submit">Submit Your Meal Plan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <!-- Footer Start -->
-        <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <!-- <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
             <div class="container py-5">
                 <div class="row g-5">
                     <div class="col-lg-3 col-md-6">
@@ -222,7 +297,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- Footer End -->
 
 

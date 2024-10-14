@@ -80,7 +80,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-        # 'NAME': 'speech_db',  # The name of your database
+        'NAME': 'speech_db',  # The name of your database
         'USER': 'root',  # Your MySQL username
         'PASSWORD': 'password',  # Your MySQL password
         'HOST': 'localhost',
@@ -91,6 +91,7 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+# AUTH_USER_MODEL = 'SmartKitchen_App.CustomUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

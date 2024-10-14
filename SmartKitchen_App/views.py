@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import views as auth_views
@@ -11,9 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.utils import timezone
 from datetime import timedelta
-from .models import Recipe,MealPlan,Response  # Import the Recipe model
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 
 # Create your views here.
@@ -91,32 +90,34 @@ def userlogout(request):
     return redirect('userlogin')
 
 
-
-
 def admindashboard(request):
     # Count total recipes
-    total_recipes = Recipe.objects.count()
-    
+    total_recipes = recipe.objects.count()  # Correct model reference
+
     # Count active users
     active_users = User.objects.filter(is_active=True).count()
-    
+
     # Count new recipes this week
     start_of_week = timezone.now() - timedelta(days=timezone.now().weekday())
-    new_recipes_this_week = Recipe.objects.filter(created_at__gte=start_of_week).count()
+    new_recipes_this_week = recipe.objects.filter(
+        created_at__gte=start_of_week).count()  # Correct model reference
 
+    # Prepare context for rendering
     context = {
         'total_recipes': total_recipes,
         'active_users': active_users,
         'new_recipes_this_week': new_recipes_this_week,
     }
-    
+
+    # Only one return statement needed
     return render(request, 'admin/admindashboard.html', context)
+
 
 def userdashboard(request):
     user = request.user  # Get the currently logged-in user
 
     # Count total recipes saved by the user
-    total_recipes = Recipe.objects.count()
+    total_recipes = recipe.objects.count()
 
     # Count planned meals by the user
     planned_meals = MealPlan.objects.count()
@@ -131,6 +132,7 @@ def userdashboard(request):
     }
 
     return render(request, 'user_dashboard.html', context)
+
 
 def menu(request):
     return render(request, 'menu.html')
@@ -148,7 +150,7 @@ def testimonial(request):
     return render(request, 'testimonial.html')
 
 
-def create_recipe(request):  # Renamed the view to avoid conflict with the model
+def create_recipe(request):  # Keep your function name as is
     if request.method == 'POST':
         recipe_name = request.POST.get('name')
         recipe_category = request.POST.get('category')
@@ -161,39 +163,32 @@ def create_recipe(request):  # Renamed the view to avoid conflict with the model
         if recipe_name and recipe_category and ingredients and instructions and prep_time and cook_time:
             try:
                 # Save data to the Recipe model
-                add_recipe = Recipe.objects.create(
+                new_recipe = recipe.objects.create(  # Correctly reference the Recipe model
                     r_name=recipe_name,
                     category=recipe_category,
-                    ingridents=ingredients,  # Ensure spelling is consistent
+                    ingridents=ingredients,
                     instructions=instructions,
-                    prep_time=int(prep_time),  # Convert to integer
+                    prep_time=int(prep_time),
                     cooking_time=int(cook_time)
                 )
-                add_recipe.save()
-
-                # Redirect to a success page after saving
-                return redirect('recipe')
-
+                messages.success(request, 'Recipe created successfully!')
+                return redirect('recipe_list')  # Adjust this as needed
             except Exception as e:
-                # Return an error response if something goes wrong
-                return JsonResponse({'error': str(e)}, status=500)
-
+                messages.error(request, f'Error saving recipe: {str(e)}')
         else:
-            # If any field is missing, return an error message
-            return JsonResponse({'error': 'All fields are required.'}, status=400)
+            messages.error(request, 'All fields are required. Please fill in all fields.')
 
-    # Get the total count of recipes
-    total_recipes = Recipe.objects.count()
+    # Render the recipe creation form
+    return render(request, 'admin/recipe.html')
 
-    # Handle GET requests and display the form
-    return render(request, 'admin/recipe.html', {'total_recipes': total_recipes})
-    
+
 def health_analysis(request):
     if request.method == 'POST':
         weight = request.POST.get('weight')
         height = request.POST.get('height')
         health_issue = request.POST.get('health_issues')
-        other_health_issue = request.POST.get('other_health_issue') if health_issue == 'Other' else None
+        other_health_issue = request.POST.get(
+            'other_health_issue') if health_issue == 'Other' else None
 
         # Save data to the database
         HealthAnalysis.objects.create(
@@ -203,11 +198,9 @@ def health_analysis(request):
             other_health_issue=other_health_issue
         )
         # Redirect to the index page or a success message
-        return redirect('user_dashboard')  # Assuming 'index' is the URL name for the home page
-    
+        # Assuming 'index' is the URL name for the home page
+        return redirect('user_dashboard')
 
-from django.shortcuts import render
-from django.http import HttpResponse
 
 def health_analysis_report(request):
     # Get the latest health analysis data for the user
@@ -259,13 +252,16 @@ def health_analysis_report(request):
         all_recommendations.append(rec)
 
     # Prepare data for the graph
-    total_food_recommended = sum([len(rec.get('food', [])) for rec in all_recommendations])
-    total_food_to_avoid = sum([len(rec.get('avoid', [])) for rec in all_recommendations])
+    total_food_recommended = sum(
+        [len(rec.get('food', [])) for rec in all_recommendations])
+    total_food_to_avoid = sum([len(rec.get('avoid', []))
+                              for rec in all_recommendations])
 
     # Render the health report
     return render(request, 'health.html', {
         'health_analysis': health_analysis,
-        'bmi': round(bmi, 2),  # Round BMI to two decimal places for better readability
+        # Round BMI to two decimal places for better readability
+        'bmi': round(bmi, 2),
         'bmi_status': bmi_status,
         'recommendations': all_recommendations,
         'total_food_recommended': total_food_recommended,
@@ -274,7 +270,7 @@ def health_analysis_report(request):
 
 
 def vassi(request):
-    return render(request,'voiceassistant.html')
+    return render(request, 'voiceassistant.html')
 # def dashboard(request):
 #     return render(request, 'user/index.html')
 # def notf(request):
@@ -283,6 +279,8 @@ def vassi(request):
 #     return render(request, 'user/user.html')
 
 # handle to speech queries
+
+
 @csrf_exempt  # Temporarily disable CSRF for simplicity
 def get_response(request):
     if request.method == 'POST':
@@ -291,7 +289,8 @@ def get_response(request):
             speech_text = data.get('speech', '')
 
             # Query the database to find a matching question
-            response = Response.objects.filter(question__icontains=speech_text).first()
+            response = Response.objects.filter(
+                question__icontains=speech_text).first()
 
             if response:
                 return JsonResponse({'response': response.response})
@@ -300,3 +299,51 @@ def get_response(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid input'}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def usermanagement(request):
+    return render(request, 'usermanagement.html')
+
+# Display all users
+
+
+def user_list(request):
+    users = User.objects.all()
+    return render(request, 'user_management.html', {'users': users})
+
+# Add a new user
+
+
+def add_user(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('user_list')
+    else:
+        form = UserCreationForm()
+    return render(request, 'user_management.html', {'form': form})
+
+# Edit an existing user
+
+
+def edit_user(request, id):
+    user = get_object_or_404(User, id=id)
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_list')
+    else:
+        form = UserChangeForm(instance=user)
+    return render(request, 'user_management.html', {'form': form})
+
+# Delete a user
+
+
+def delete_user(request, id):
+    user = get_object_or_404(User, id=id)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('user_list')
+    return render(request, 'user_management.html', {'user': user})
