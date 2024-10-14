@@ -1,6 +1,8 @@
 from django.urls import path
 from .views import  *
 from django.contrib.auth import views as auth_views
+from django.contrib import admin
+from SmartKitchen_App import views
 
 
 urlpatterns = [
@@ -23,6 +25,10 @@ urlpatterns = [
     path('dashboard/',dashboard, name='dashboard'),
     path('vassi/',vassi, name='voiceassistant'),
     path('health_analysis/',health_analysis, name='health_analysis'),
+    path('health/', health_analysis_report, name='health_analysis_report'),
+    path('admin/', admin.site.urls),
+    path('query/', views.get_response, name='get_response'),  # Add this line
+
     # path('notifications/',notf, name='notf'),
     # path('profile/',profile,name='profile'),
 ]

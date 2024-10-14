@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
@@ -10,8 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.utils import timezone
 from datetime import timedelta
-from django.http import JsonResponse
-from .models import Recipe,MealPlan  # Import the Recipe model
+from .models import Recipe,MealPlan,Response  # Import the Recipe model
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 # Create your views here.
@@ -200,9 +202,77 @@ def health_analysis(request):
             health_issue=health_issue,
             other_health_issue=other_health_issue
         )
-
         # Redirect to the index page or a success message
         return redirect('user_dashboard')  # Assuming 'index' is the URL name for the home page
+    
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def health_analysis_report(request):
+    # Get the latest health analysis data for the user
+    health_analysis = HealthAnalysis.objects.filter().last()
+
+    # Check if health_analysis is None
+    if health_analysis is None:
+        # Return an appropriate response if no health data is found
+        return HttpResponse("No health data available for analysis.")
+
+    # Calculate BMI (Body Mass Index) = weight (kg) / (height (m))^2
+    height_in_meters = health_analysis.height / 100
+    bmi = health_analysis.weight / (height_in_meters ** 2)
+    bmi_status = "Underweight" if bmi < 18.5 else "Normal weight" if bmi < 25 else "Overweight" if bmi < 30 else "Obese"
+
+    # Basic recommendations based on health issue
+    recommendations = {
+        'Diabetes': {
+            'food': ['Leafy Greens', 'Whole Grains', 'Fish', 'Nuts'],
+            'avoid': ['Sugary Drinks', 'White Bread', 'Processed Foods'],
+            'tips': 'Monitor blood sugar levels regularly and maintain a balanced diet.',
+        },
+        'Hypertension': {
+            'food': ['Bananas', 'Leafy Greens', 'Oatmeal', 'Garlic'],
+            'avoid': ['Salt', 'Alcohol', 'Caffeine'],
+            'tips': 'Regular exercise and reducing sodium intake can help manage blood pressure.',
+        },
+        'Obesity': {
+            'food': ['Lean Proteins', 'Vegetables', 'Fruits', 'Whole Grains'],
+            'avoid': ['Sugary Snacks', 'Fast Food', 'Soda'],
+            'tips': 'Incorporate regular physical activity and avoid calorie-dense foods.',
+        },
+        'High Cholesterol': {
+            'food': ['Oats', 'Barley', 'Nuts', 'Fatty Fish'],
+            'avoid': ['Red Meat', 'Full-fat Dairy', 'Fried Foods'],
+            'tips': 'Include soluble fiber in the diet and exercise regularly to improve cholesterol levels.',
+        },
+        'Sugar': {
+            'food': ['Whole Grains', 'Nuts', 'Legumes', 'Non-Starchy Veggies'],
+            'avoid': ['Refined Sugar', 'White Flour', 'Fruit Juice'],
+            'tips': 'Limit intake of added sugars and focus on low glycemic index foods.',
+        },
+    }
+
+    # Collect recommendations for all health issues
+    all_recommendations = []
+    for issue, rec in recommendations.items():
+        rec['issue'] = issue
+        all_recommendations.append(rec)
+
+    # Prepare data for the graph
+    total_food_recommended = sum([len(rec.get('food', [])) for rec in all_recommendations])
+    total_food_to_avoid = sum([len(rec.get('avoid', [])) for rec in all_recommendations])
+
+    # Render the health report
+    return render(request, 'health.html', {
+        'health_analysis': health_analysis,
+        'bmi': round(bmi, 2),  # Round BMI to two decimal places for better readability
+        'bmi_status': bmi_status,
+        'recommendations': all_recommendations,
+        'total_food_recommended': total_food_recommended,
+        'total_food_to_avoid': total_food_to_avoid,
+    })
+
+
 def vassi(request):
     return render(request,'voiceassistant.html')
 # def dashboard(request):

@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Analysis Report</title>
+    <style>
+        body {
+            background-image: url(/static/img/bg_log.png);
+            background-repeat: no-repeat;
+            background-position: 100%;
+            background-size: cover;
+        }
+
+        .container {
+            width: 80%;
+            margin: 100px auto;
+            background: #0F172B;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #ffae00;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: #ffae00;
+        }
+
+        .data-block {
+            margin-bottom: 30px;
+        }
+
+        .recommendation {
+            padding: 20px;
+            background-color: #eaeaea;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .recommendation ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .recommendation ul li {
+            margin: 5px 0;
+        }
+
+        .table-container {
+            margin-top: 30px;
+            color: #000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #f9f9f9;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ffae00;
+            color: #fff;
+        }
+
+        .graph-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .bar {
+            width: 20%;
+            height: 20px;
+            background-color: #ffae00;
+            text-align: center;
+            color: #fff;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="section-title">Health Analysis Report</h1>
+
+        <!-- Health Stats -->
+        <div class="data-block">
+            <h2 style="color: #ffae00;">Health Stats</h2>
+            <p><strong>Weight:</strong> {{ health_analysis.weight }} kg</p>
+            <p><strong>Height:</strong> {{ health_analysis.height }} cm</p>
+            <p><strong>BMI:</strong> {{ bmi }} ({{ bmi_status }})</p>
+        </div>
+
+        <!-- Recommendations for Each Health Issue -->
+        <div class="data-block">
+            <h2 style="color: #ffae00;">Recommendations</h2>
+            {% for rec in recommendations %}
+            <div class="recommendation">
+                <h3>{{ rec.issue }}</h3>
+                <p><strong>Recommended to Eat:</strong></p>
+                <ul>
+                    {% for food in rec.food %}
+                    <li>{{ food }}</li>
+                    {% endfor %}
+                </ul>
+                <p><strong>Recommended to Avoid:</strong></p>
+                <ul>
+                    {% for avoid in rec.avoid %}
+                    <li>{{ avoid }}</li>
+                    {% endfor %}
+                </ul>
+                <p><strong>Tips:</strong> {{ rec.tips }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Graphical Representation -->
+        <div class="graph-container">
+            <h2 style="color: #ffae00;">Graphical Representation of Food Recommendations</h2>
+            <div>
+                <p>Recommended Foods</p>
+                <div class="bar" style="width: {{ total_food_recommended }}%;">{{ total_food_recommended }}</div>
+                <p>Foods to Avoid</p>
+                <div class="bar" style="width: {{ total_food_to_avoid }}%;">{{ total_food_to_avoid }}</div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock content %}
