@@ -5,9 +5,14 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
-from .models import*
+from .models import *
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.utils import timezone
+from datetime import timedelta
+from django.http import JsonResponse
+from .models import Recipe,MealPlan  # Import the Recipe model
+
 
 # Create your views here.
 
@@ -43,7 +48,7 @@ def userlogin(request):
             # Check if the user is a super admin (superuser)
             if user.is_superuser:
                 # Redirect to super admin dashboard
-                return redirect('admin_dashboard')
+                return redirect('admindashboard')
             else:
                 return redirect('index')  # Redirect to user home
         else:
@@ -84,13 +89,46 @@ def userlogout(request):
     return redirect('userlogin')
 
 
+
+
+def admindashboard(request):
+    # Count total recipes
+    total_recipes = Recipe.objects.count()
+    
+    # Count active users
+    active_users = User.objects.filter(is_active=True).count()
+    
+    # Count new recipes this week
+    start_of_week = timezone.now() - timedelta(days=timezone.now().weekday())
+    new_recipes_this_week = Recipe.objects.filter(created_at__gte=start_of_week).count()
+
+    context = {
+        'total_recipes': total_recipes,
+        'active_users': active_users,
+        'new_recipes_this_week': new_recipes_this_week,
+    }
+    
+    return render(request, 'admin/admindashboard.html', context)
+
 def userdashboard(request):
-    return render(request, 'user_dashboard.html')
+    user = request.user  # Get the currently logged-in user
 
+    # Count total recipes saved by the user
+    total_recipes = Recipe.objects.count()
 
-def adminashboard(request):
-    return render(request, 'admin/admin_dashboard.html')
+    # Count planned meals by the user
+    planned_meals = MealPlan.objects.count()
 
+    # Count shopping list items by the user
+    # shopping_list_items = ShoppingList.objects.filter(user=user).count()
+
+    context = {
+        'total_recipes': total_recipes,
+        'planned_meals': planned_meals,
+        # 'shopping_list_items': shopping_list_items,
+    }
+
+    return render(request, 'user_dashboard.html', context)
 
 def menu(request):
     return render(request, 'menu.html')
@@ -108,7 +146,7 @@ def testimonial(request):
     return render(request, 'testimonial.html')
 
 
-def create_recipe(request):
+def create_recipe(request):  # Renamed the view to avoid conflict with the model
     if request.method == 'POST':
         recipe_name = request.POST.get('name')
         recipe_category = request.POST.get('category')
@@ -117,7 +155,7 @@ def create_recipe(request):
         prep_time = request.POST.get('prep_time')
         cook_time = request.POST.get('cook_time')
 
-         # Validate if all required fields are present
+        # Validate if all required fields are present
         if recipe_name and recipe_category and ingredients and instructions and prep_time and cook_time:
             try:
                 # Save data to the Recipe model

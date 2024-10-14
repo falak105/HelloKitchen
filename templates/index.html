@@ -487,62 +487,64 @@
                         </button>
                     </div>
                 </div>
+                <div class="col-md-6 bg-dark d-flex align-items-center">
+                    <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
+                        <h5 class="section-title ff-secondary text-start text-primary fw-normal">Health Analysis</h5>
+                        <h1 class="text-white mb-4">Current Health</h1>
+                        <form method="POST" action="{% url 'health_analysis' %}">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <!-- Weight -->
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="weight"  name="weight" placeholder="Your Weight">
+                                        <label for="weight" name="weight">Weight (in kg)</label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Height -->
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="height" name="height" placeholder="Your Height">
+                                        <label for="height" name="height">Height (in cm)</label>
+                                    </div>
+                                </div>
                 
-        <div class="col-md-6 bg-dark d-flex align-items-center">
-            <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
-                <h5 class="section-title ff-secondary text-start text-primary fw-normal">Health Analysis</h5>
-                <h1 class="text-white mb-4">Current Health</h1>
-                <form method="POST" action="{% url 'health_analysis' %}">
-                    {% csrf_token %}
-                    <div class="row g-3">
-                        <!-- Weight -->
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="weight"  name="weight" placeholder="Your Weight">
-                                <label for="weight" name="weight">Weight (in kg)</label>
+                                <!-- Health Issues Dropdown -->
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="health_issues" name="health_issues" onchange="toggleOtherHealthIssue()">
+                                            <option value="" disabled selected>Select a Health Issue</option>
+                                            <option value="Diabetes">Diabetes</option>
+                                            <option value="Hypertension">Hypertension</option>
+                                            <option value="Obesity">Obesity</option>
+                                            <option value="High Cholesterol">High Cholesterol</option>
+                                            <option value="Sugar">High Sugar</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        <label for="health_issues" name="health_issues">Common Health Issues</label>
+                                    </div>
+                                </div>
+                
+                                <!-- If "Other" is selected, this input field will show -->
+                                <div class="col-12" id="other-health-issue-div" style="display:none;">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="other_health_issue" name="other_health_issue" placeholder="Specify Health Issue">
+                                        <label for="other_health_issue">Specify Health Issue</label>
+                                    </div>
+                                </div>
+                
+                                <!-- Submit Button -->
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100 py-3" type="submit">Submit Health Analysis</button>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <!-- Height -->
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="height" name="height" placeholder="Your Height">
-                                <label for="height" name="height">Height (in cm)</label>
-                            </div>
-                        </div>
-        
-                        <!-- Health Issues Dropdown -->
-                        <div class="col-12">
-                            <div class="form-floating">
-                                <select class="form-select" id="health_issues" name="health_issues" onchange="toggleOtherHealthIssue()">
-                                    <option value="" disabled selected>Select a Health Issue</option>
-                                    <option value="Diabetes">Diabetes</option>
-                                    <option value="Hypertension">Hypertension</option>
-                                    <option value="Obesity">Obesity</option>
-                                    <option value="High Cholesterol">High Cholesterol</option>
-                                    <option value="Sugar">High Sugar</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <label for="health_issues" name="health_issues">Common Health Issues</label>
-                            </div>
-                        </div>
-        
-                        <!-- If "Other" is selected, this input field will show -->
-                        <div class="col-12" id="other-health-issue-div" style="display:none;">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="other_health_issue" name="other_health_issue" placeholder="Specify Health Issue">
-                                <label for="other_health_issue">Specify Health Issue</label>
-                            </div>
-                        </div>
-        
-                        <!-- Submit Button -->
-                        <div class="col-12">
-                            <button class="btn btn-primary w-100 py-3" type="submit">Submit Health Analysis</button>
-                        </div>
+                        </form>
                     </div>
-                </form>
-            </div>
-        </div>
+                </div>
+                
+                
+        
     </div>
     </div>
         <script>

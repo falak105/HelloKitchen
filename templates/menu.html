@@ -367,5 +367,69 @@
             </div>
         </div>
         <!-- Menu End -->
+        <div class="col-md-6 bg-dark d-flex align-items-center">
+            <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
+                <h5 class="section-title ff-secondary text-start text-primary fw-normal">Meal Plan</h5>
+                <h1 class="text-white mb-4">Plan Your Meal here</h1>
+                <form method="POST" action="{% url 'health_analysis' %}">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <!-- breakfast -->
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="weight"  name="weight" placeholder="Your Weight">
+                                <label for="weight" name="weight">Breakfast</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Lunch -->
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="height" name="height" placeholder="Your Height">
+                                <label for="height" name="height">Lunch</label>
+                            </div>
+                        </div>
+
+                        <!-- Dinner -->
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="height" name="height" placeholder="Your Height">
+                                <label for="height" name="height">Dinner</label>
+                            </div>
+                        </div>
+        
+                        <!-- Time -->
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <select class="form-select" id="health_issues" name="health_issues" onchange="toggleOtherHealthIssue()">
+                                    <option value="" disabled selected>Set your reminder</option>
+                                    <option value="Before 1hr of food">Before 1hr of food</option>
+                                    <option value="Before 45 mins of food">Before 45 mins of food</option>
+                                    <option value="Before 30 mins of food">Before 30 mins of food</option>
+                                    <option value="Before 15 mins of food">Before 15 mins of food</option>
+                                    <option value="Before 5 mins of food">Before 5 mins of food</option>
+                                    
+                                </select>
+                                <label for="health_issues" name="health_issues">Common Timeings</label>
+                            </div>
+                        </div>
+        
+                        <!-- If "Other" is selected, this input field will show -->
+                        <div class="col-12" id="other-health-issue-div" style="display:none;">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="other_health_issue" name="other_health_issue" placeholder="Specify Health Issue">
+                                <label for="other_health_issue">Specify Meal Plan</label>
+                            </div>
+                        </div>
+        
+                        <!-- Submit Button -->
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100 py-3" type="submit">Submit Your Meal Plan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         
 {% endblock content %}

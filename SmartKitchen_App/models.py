@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Recipe(models.Model):
@@ -9,6 +10,7 @@ class Recipe(models.Model):
     instructions = models.CharField(max_length=255)
     prep_time = models.IntegerField()
     cooking_time = models.IntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.r_name
@@ -30,3 +32,21 @@ class HealthAnalysis(models.Model):
 
     def __str__(self):
         return f"Health Analysis - Weight: {self.weight}kg, Height: {self.height}cm"
+    
+class MealPlan(models.Model):
+    Meal_Plan=[
+        ('Date','Dates'),
+        ('BreakFast','BreakFast'),
+        ('Lunch'),('Lunch'),
+        ('Dinner'),('Dinner'),
+    
+    ]
+
+    Date = models.DateField()
+    BreakFast = models.CharField(max_length=255)
+    Lunch = models.CharField(max_length=255)
+    Dinner = models.CharField(max_length=255)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.Date
