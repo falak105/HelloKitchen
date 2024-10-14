@@ -23,7 +23,7 @@ urlpatterns = [
     path('dashboard/',dashboard, name='dashboard'),
     path('vassi/',vassi, name='voiceassistant'),
     path('health_analysis/',health_analysis, name='health_analysis'),
-    path('health-analysis/', health_analysis_report, name='health_analysis_report'),
+    path('health/', health_analysis_report, name='health_analysis_report'),
     # path('notifications/',notf, name='notf'),
     # path('profile/',profile,name='profile'),
 ]
