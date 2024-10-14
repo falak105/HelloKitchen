@@ -487,73 +487,79 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-md-6 bg-dark d-flex align-items-center">
-                    <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
-                        <h5 class="section-title ff-secondary text-start text-primary fw-normal">Reservation</h5>
-                        <h1 class="text-white mb-4">Current Health</h1>
-                        <form>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="name" placeholder="Your Name">
-                                        <label for="name">Weight</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="email" class="form-control" id="email" placeholder="Your Email">
-                                        <label for="email">?????</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating date" id="date3" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" id="datetime" placeholder="Date & Time" data-target="#date3" data-toggle="datetimepicker" />
-                                        <label for="datetime">Cals Burned this week</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="select1">
-                                          <option value="1">Exc 1</option>
-                                          <option value="2">Exc 2</option>
-                                          <option value="3">Exc 3</option>
-                                        </select>
-                                        <label for="select1">Exercises Done</label>
-                                      </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Special Request" id="message" style="height: 100px"></textarea>
-                                        <label for="message">Sugar Content</label>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <button class="btn btn-primary w-100 py-3" type="submit">Book Now</button>
-                                </div>
+                
+        <div class="col-md-6 bg-dark d-flex align-items-center">
+            <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
+                <h5 class="section-title ff-secondary text-start text-primary fw-normal">Health Analysis</h5>
+                <h1 class="text-white mb-4">Current Health</h1>
+                <form method="POST" action="{% url 'health_analysis' %}">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <!-- Weight -->
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="weight"  name="weight" placeholder="Your Weight">
+                                <label for="weight" name="weight">Weight (in kg)</label>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Youtube Video</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- 16:9 aspect ratio -->
-                        <div class="ratio ratio-16x9">
-                            <iframe class="embed-responsive-item" src="" id="video" allowfullscreen allowscriptaccess="always"
-                                allow="autoplay"></iframe>
+                        </div>
+                        
+                        <!-- Height -->
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="height" name="height" placeholder="Your Height">
+                                <label for="height" name="height">Height (in cm)</label>
+                            </div>
+                        </div>
+        
+                        <!-- Health Issues Dropdown -->
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <select class="form-select" id="health_issues" name="health_issues" onchange="toggleOtherHealthIssue()">
+                                    <option value="" disabled selected>Select a Health Issue</option>
+                                    <option value="Diabetes">Diabetes</option>
+                                    <option value="Hypertension">Hypertension</option>
+                                    <option value="Obesity">Obesity</option>
+                                    <option value="High Cholesterol">High Cholesterol</option>
+                                    <option value="Sugar">High Sugar</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <label for="health_issues" name="health_issues">Common Health Issues</label>
+                            </div>
+                        </div>
+        
+                        <!-- If "Other" is selected, this input field will show -->
+                        <div class="col-12" id="other-health-issue-div" style="display:none;">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="other_health_issue" name="other_health_issue" placeholder="Specify Health Issue">
+                                <label for="other_health_issue">Specify Health Issue</label>
+                            </div>
+                        </div>
+        
+                        <!-- Submit Button -->
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100 py-3" type="submit">Submit Health Analysis</button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
+    </div>
+        <script>
+            // Function to show/hide the 'Other' input field
+            function toggleOtherHealthIssue() {
+                const healthIssueSelect = document.getElementById('health_issues');
+                const otherHealthIssueDiv = document.getElementById('other-health-issue-div');
+                
+                if (healthIssueSelect.value === 'Other') {
+                    otherHealthIssueDiv.style.display = 'block';  // Show the input field
+                } else {
+                    otherHealthIssueDiv.style.display = 'none';  // Hide the input field
+                }
+            }
+        </script>
+        
+        
         <!-- Reservation Start -->
 
 

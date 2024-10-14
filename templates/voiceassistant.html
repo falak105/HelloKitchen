@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 {% load static %}
 {% block extrascript %}
 {% endblock extrascript %}
@@ -11,17 +12,20 @@
     <title>Speech Recognition Chat Box</title>
     <!-- <link rel="stylesheet" href="chat-style.css"> -->
      <style>
-        body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f8ff;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
+        body{
+         background-image: url(/static/img/bg_log.png);
+         background-repeat: no-repeat;
+         background-position: 100%;
+         background-size: cover;
+    }
+    
 .chat-box {
     width: 400px;
     background-color: #fff;
@@ -31,13 +35,14 @@
 }
 
 h1 {
+    margin-top: 90px;
     text-align: center;
-    color: #4A90E2;
+    color: #ffae00;
     font-size: 24px;
 }
 
 button {
-    background-color: #4A90E2;
+    background-color: #ffae00;
     border: none;
     color: white;
     padding: 12px 18px;
@@ -50,7 +55,7 @@ button {
 }
 
 button:hover {
-    background-color: #357ABD;
+    background-color: #ffae00
 }
 
 .chat-box {
@@ -88,12 +93,13 @@ button:hover {
      
 </head>
 <body>
-    <div class="container">
+    <center>
+    <div class="container" style="margin-top: 50px;">
         <h1>Chat with Voice</h1>
         <button id="startButton">🎤 Start Talking</button>
         <div class="chat-box" id="output"></div>
     </div>
-    
+    </center>
     <script>
         // Check for browser support
 // if ('webkitSpeechRecognition' in window) {
@@ -202,7 +208,7 @@ if ('webkitSpeechRecognition' in window) {
         window.speechSynthesis.speak(speech);
     }
 
-    // Handle recognition errors
+    // Handle recognition error `s
     recognition.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         outputElement.textContent = 'Error recognizing speech.';
