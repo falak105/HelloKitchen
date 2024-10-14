@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
-from .models import Recipe
+from .models import*
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -148,7 +148,23 @@ def create_recipe(request):
     # Handle GET requests and display the form
     return render(request, 'admin/recipe.html', {'total_recipes': total_recipes})
     
+def health_analysis(request):
+    if request.method == 'POST':
+        weight = request.POST.get('weight')
+        height = request.POST.get('height')
+        health_issue = request.POST.get('health_issues')
+        other_health_issue = request.POST.get('other_health_issue') if health_issue == 'Other' else None
 
+        # Save data to the database
+        HealthAnalysis.objects.create(
+            weight=weight,
+            height=height,
+            health_issue=health_issue,
+            other_health_issue=other_health_issue
+        )
+
+        # Redirect to the index page or a success message
+        return redirect('user_dashboard')  # Assuming 'index' is the URL name for the home page
 def vassi(request):
     return render(request,'voiceassistant.html')
 # def dashboard(request):

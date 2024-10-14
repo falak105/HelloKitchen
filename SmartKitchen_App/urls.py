@@ -22,6 +22,7 @@ urlpatterns = [
     path('recipe/', create_recipe, name='recipe'),
     path('dashboard/',dashboard, name='dashboard'),
     path('vassi/',vassi, name='voiceassistant'),
+    path('health_analysis/',health_analysis, name='health_analysis'),
     # path('notifications/',notf, name='notf'),
     # path('profile/',profile,name='profile'),
 ]
