@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Analysis Report</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: #ffae00;
+        }
+
+        .data-block {
+            margin-bottom: 30px;
+        }
+
+        .recommendation {
+            padding: 20px;
+            background-color: #eaeaea;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .recommendation ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .recommendation ul li {
+            margin: 5px 0;
+        }
+
+        .chart-container {
+            margin-top: 30px;
+        }
+
+        .chart-container canvas {
+            width: 100%;
+            max-width: 600px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="section-title">Health Analysis Report</h1>
+
+        <!-- Health Stats -->
+        <div class="data-block">
+            <h2>Health Stats</h2>
+            <p><strong>Weight:</strong> {{ health_analysis.weight }} kg</p>
+            <p><strong>Height:</strong> {{ health_analysis.height }} cm</p>
+            <p><strong>Health Issue:</strong> {{ health_analysis.health_issue }}</p>
+        </div>
+
+        <!-- Food Recommendations -->
+        <div class="data-block">
+            <h2>Food Recommendations</h2>
+
+            <!-- What to eat -->
+            <div class="recommendation">
+                <h3>Recommended to Eat:</h3>
+                <ul>
+                    {% for food in recommendation.food %}
+                    <li>{{ food }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- What to avoid -->
+            <div class="recommendation">
+                <h3>Recommended to Avoid:</h3>
+                <ul>
+                    {% for avoid in recommendation.avoid %}
+                    <li>{{ avoid }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Graph (Chart.js) -->
+        <div class="chart-container">
+            <h2>Graphical Representation</h2>
+            <canvas id="foodChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data for the graph
+        const labels = ["Eat", "Avoid"];
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: "Food Recommendations",
+                backgroundColor: ["#28a745", "#dc3545"],
+                data: [{ recommendation.food | length }, { recommendation.avoid | length }],
+            }]
+        };
+
+        // Configuration for the chart
+        const config = {
+            type: 'doughnut',
+            data: data,
+        };
+
+        // Render the chart
+        const foodChart = new Chart(
+            document.getElementById('foodChart'),
+            config
+        );
+    </script>
+</body>
+{% endblock content %}

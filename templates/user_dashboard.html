@@ -139,12 +139,12 @@
         <aside class="sidebar">
             <h2>User Panel</h2>
             <ul>
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
                 <li><a href="#">My Recipes</a></li>
                 <li><a href="#">Meal Planner</a></li>
                 <li><a href="#">Shopping List</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Logout</a></li>
+                <li><a href="{% url 'health_analysis_report' %}">Settings</a></li>
+                <li><a href="{% url 'userlogout' %}">Logout</a></li>
             </ul>
         </aside>
         <main class="main-content">

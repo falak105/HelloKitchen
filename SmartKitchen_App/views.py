@@ -162,9 +162,47 @@ def health_analysis(request):
             health_issue=health_issue,
             other_health_issue=other_health_issue
         )
-
         # Redirect to the index page or a success message
         return redirect('user_dashboard')  # Assuming 'index' is the URL name for the home page
+
+def health_analysis_report(request):
+    # Assuming the data comes from the latest entry for this user
+    health_analysis = HealthAnalysis.objects.filter().last()
+
+    # Basic recommendations based on health issue
+    recommendations = {
+        'Diabetes': {
+            'food': ['Leafy Greens', 'Whole Grains', 'Fish', 'Nuts'],
+            'avoid': ['Sugary Drinks', 'White Bread', 'Processed Foods'],
+        },
+        'Hypertension': {
+            'food': ['Bananas', 'Leafy Greens', 'Oatmeal', 'Garlic'],
+            'avoid': ['Salt', 'Alcohol', 'Caffeine'],
+        },
+        'Obesity': {
+            'food': ['Lean Proteins', 'Vegetables', 'Fruits', 'Whole Grains'],
+            'avoid': ['Sugary Snacks', 'Fast Food', 'Soda'],
+        },
+        'High Cholesterol': {
+            'food': ['Oats', 'Barley', 'Nuts', 'Fatty Fish'],
+            'avoid': ['Red Meat', 'Full-fat Dairy', 'Fried Foods'],
+        },
+        'Sugar': {
+            'food': ['Whole Grains', 'Nuts', 'Legumes', 'Non-Starchy Veggies'],
+            'avoid': ['Refined Sugar', 'White Flour', 'Fruit Juice'],
+        },
+    }
+
+    selected_issue = health_analysis.health_issue
+    user_recommendation = recommendations.get(selected_issue, {})
+
+    # Render the health report
+    return render(request, 'health_analysis.html', {
+        'health_analysis': health_analysis,
+        'recommendation': user_recommendation
+    })
+ 
+    
 def vassi(request):
     return render(request,'voiceassistant.html')
 # def dashboard(request):
