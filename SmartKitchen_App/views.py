@@ -12,6 +12,7 @@ import json
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from google.cloud import translate_v2 as translate 
 
 
 # Create your views here.
@@ -299,6 +300,7 @@ def query(request):
             "lunch": "hot rice with chicken currry and meen curry with aviyal and yellow moru with some hot sambar combo also haing some payar curry and achar!!",
             "dinner": "take some morinja hot porotta and take some piece of pork or beaf curry and have it like yum yum!!",
             "എടാ": "enthada kuttah..!!",
+            "കോഴിക്കറി": "ചിക്കൻ ചെറിയ കഷണങ്ങളായി മുറിച്ച് മസാലപ്പൊടി ഉപയോഗിച്ച് മാരിനേറ്റ് ചെയ്ത് 1 മണിക്കൂർ കാത്തിരിക്കുക, എന്നിട്ട് തിളപ്പിച്ച എണ്ണയിൽ ചട്ടിയിൽ ഇട്ടു 7-8 മിനിറ്റ് ഫ്രൈ ചെയ്യുക",
         }
 
         response_text = dataset.get(speech_text.lower(), "Sorry, I didn't understand that.")
