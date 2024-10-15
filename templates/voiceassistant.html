@@ -29,7 +29,7 @@
 
         .chat-box {
             width: 400px;
-            background-color: #fff;
+            background-color: #ffffff3c;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -56,7 +56,20 @@
         }
 
         button:hover {
-            background-color: #ffae00;
+            background-color: #f8cb6b;
+        }
+
+        button:active::first-letter {
+            content: '';
+            position:unset;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid rgba(30, 144, 255, 0.5);
+            animation: pulse 1s ease infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .chat-box {
@@ -76,7 +89,7 @@
         }
 
         .user-message {
-            background-color: #DCF8C6;
+            background-color: #fffab1;
             align-self: flex-end;
             color: #333;
         }
@@ -92,84 +105,84 @@
 <body>
     <center>
         <div class="container" style="margin-top: 50px;">
-            <h1>Chat with Voice</h1>
-            <button id="startButton">🎤 Start Talking</button>
+            <h1>Smart Kitchen Assistant</h1>
+            <button id="startButton">🎤 Ask Me!</button>
             <div class="chat-box" id="output"></div>
         </div>
     </center>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-    const startButton = document.getElementById('startButton');
-    const outputBox = document.getElementById('output');
+            const startButton = document.getElementById('startButton');
+            const outputBox = document.getElementById('output');
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
 
-    startButton.addEventListener('click', () => {
-        recognition.start();
-        appendMessage('Listening...', 'bot');
-    });
+            startButton.addEventListener('click', () => {
+                recognition.start();
+                appendMessage('Listening...', 'bot');
+            });
 
-    recognition.onresult = function (event) {
-        const transcript = event.results[0][0].transcript;
-        appendMessage(`You said: ${transcript}`, 'user');
-        sendToServer(transcript);
-    };
+            recognition.onresult = function (event) {
+                const transcript = event.results[0][0].transcript;
+                appendMessage(`You said: ${transcript}`, 'user');
+                sendToServer(transcript);
+            };
 
-    function sendToServer(speechText) {
-        fetch('/query/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({ speech: speechText })
-        })
-        .then(response => response.json())
-        .then(data => {
-            appendMessage(data.response, 'bot');
-            speakResponse(data.response);
-        })
-        .catch(error => {
-            appendMessage('Error fetching response.', 'bot');
-            console.error('Error:', error);
-        });
-    }
-
-    function appendMessage(message, sender) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add(`${sender}-message`);
-        messageDiv.innerText = message;
-        outputBox.appendChild(messageDiv);
-    }
-
-    function speakResponse(text) {
-        const speech = new SpeechSynthesisUtterance(text);
-        window.speechSynthesis.speak(speech);
-    }
-
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+            function sendToServer(speechText) {
+                fetch('/query/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ speech: speechText })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        appendMessage(data.response, 'bot');
+                        speakResponse(data.response);
+                    })
+                    .catch(error => {
+                        appendMessage('Error fetching response.', 'bot');
+                        console.error('Error:', error);
+                    });
             }
-        }
-        return cookieValue;
-    }
 
-    recognition.onerror = function (event) {
-        appendMessage('Error recognizing speech.', 'bot');
-        console.error('Speech recognition error:', event.error);
-    };
-});
+            function appendMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add(`${sender}-message`);
+                messageDiv.innerText = message;
+                outputBox.appendChild(messageDiv);
+            }
+
+            function speakResponse(text) {
+                const speech = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(speech);
+            }
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            recognition.onerror = function (event) {
+                appendMessage('Error recognizing speech.', 'bot');
+                console.error('Speech recognition error:', event.error);
+            };
+        });
 
     </script>
 </body>
