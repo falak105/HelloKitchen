@@ -52,12 +52,12 @@ class MealPlan(models.Model):
     def __str__(self):
         return self.Date
     
-class Response(models.Model):
-    question = models.CharField(max_length=255)
-    response = models.CharField(max_length=255)
+# class Response(models.Model):
+#     question = models.CharField(max_length=255)
+#     response = models.CharField(max_length=255)
 
-    def __str__(self):
-        return self.question
+#     def __str__(self):
+#         return self.question
     
 # class CustomUser(AbstractUser):
 #     # Add unique related_names to avoid clashes with the auth.User model

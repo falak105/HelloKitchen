@@ -11,7 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.utils import timezone
 from datetime import timedelta
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 
@@ -283,24 +282,28 @@ def vassi(request):
 # handle to speech queries
 
 
-@csrf_exempt  # Temporarily disable CSRF for simplicity
-def get_response(request):
+@csrf_exempt
+def query(request):
     if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            speech_text = data.get('speech', '')
+        body_unicode = request.body.decode('utf-8')
+        body_data = json.loads(body_unicode)
+        speech_text = body_data.get('speech', '')
 
-            # Query the database to find a matching question
-            response = Response.objects.filter(
-                question__icontains=speech_text).first()
+        # Basic dataset response
+        dataset = {
+            "hello": "Hi there! How can I help you today?",
+            "weather": "The weather is sunny and warm today.",
+            "your name": "I am your personal voice assistant.",
+            "time": "I am not sure about the exact time, but you can always check your watch.",
+            "breakfast": "paalappam with creamy nutfinished duck curry",
+            "lunch": "hot rice with chicken currry and meen curry with aviyal and yellow moru with some hot sambar combo also haing some payar curry and achar!!",
+            "dinner": "take some morinja hot porotta and take some piece of pork or beaf curry and have it like yum yum!!"
+        }
 
-            if response:
-                return JsonResponse({'response': response.response})
-            else:
-                return JsonResponse({'response': "Sorry, I don't have an answer for that."})
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid input'}, status=400)
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+        response_text = dataset.get(speech_text.lower(), "Sorry, I didn't understand that.")
+
+        return JsonResponse({'response': response_text})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 def usermanagement(request):
