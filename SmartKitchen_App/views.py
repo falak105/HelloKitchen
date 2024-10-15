@@ -297,7 +297,8 @@ def query(request):
             "time": "I am not sure about the exact time, but you can always check your watch.",
             "breakfast": "paalappam with creamy nutfinished duck curry",
             "lunch": "hot rice with chicken currry and meen curry with aviyal and yellow moru with some hot sambar combo also haing some payar curry and achar!!",
-            "dinner": "take some morinja hot porotta and take some piece of pork or beaf curry and have it like yum yum!!"
+            "dinner": "take some morinja hot porotta and take some piece of pork or beaf curry and have it like yum yum!!",
+            "എടാ": "enthada kuttah..!!",
         }
 
         response_text = dataset.get(speech_text.lower(), "Sorry, I didn't understand that.")
