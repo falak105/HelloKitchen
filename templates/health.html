@@ -3,9 +3,7 @@
 {% block content %}
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Analysis Report</title>
+    
     <style>
         body {
             background-image: url(/static/img/bg_log.png);
@@ -104,7 +102,7 @@
 
         <!-- Health Stats -->
         <div class="data-block">
-            <h2 style="color: #ffae00;">Health Stats</h2>
+            <h2 style="color: #ffae00;">Health Status</h2>
             <p><strong>Weight:</strong> {{ health_analysis.weight }} kg</p>
             <p><strong>Height:</strong> {{ health_analysis.height }} cm</p>
             <p><strong>BMI:</strong> {{ bmi }} ({{ bmi_status }})</p>

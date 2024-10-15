@@ -299,8 +299,10 @@ def query(request):
             "breakfast": "paalappam with creamy nutfinished duck curry",
             "lunch": "hot rice with chicken currry and meen curry with aviyal and yellow moru with some hot sambar combo also haing some payar curry and achar!!",
             "dinner": "take some morinja hot porotta and take some piece of pork or beaf curry and have it like yum yum!!",
+            "duck": "cut the duck into small pieces and maranite with the appropriate masala you like and wait for hrs to settle the maranite into the duck, later take it into hot boiling oil and put some onions and tomatos into it, then put some water and wait.. it will be cooked! later take out the curry from beaker and have it yummy yummy!",
             "എടാ": "enthada kuttah..!!",
             "കോഴിക്കറി": "ചിക്കൻ ചെറിയ കഷണങ്ങളായി മുറിച്ച് മസാലപ്പൊടി ഉപയോഗിച്ച് മാരിനേറ്റ് ചെയ്ത് 1 മണിക്കൂർ കാത്തിരിക്കുക, എന്നിട്ട് തിളപ്പിച്ച എണ്ണയിൽ ചട്ടിയിൽ ഇട്ടു 7-8 മിനിറ്റ് ഫ്രൈ ചെയ്യുക",
+            "मुर्गी करी": "चिकन को छोटे-छोटे टुकड़ों में काट लें, मसाला पाउडर के साथ मैरीनेट करें और 1 घंटे तक इंतजार करें, फिर इसे उबलते तेल में एक पैन में डालें और 7-8 मिनट तक भूनें।",
         }
 
         response_text = dataset.get(speech_text.lower(), "Sorry, I didn't understand that.")
@@ -317,7 +319,7 @@ def usermanagement(request):
 
 def user_list(request):
     users = User.objects.all()
-    return render(request, 'user_management.html', {'users': users})
+    return render(request, 'usermanagement.html', {'users': users})
 
 # Add a new user
 
@@ -330,7 +332,7 @@ def add_user(request):
             return redirect('user_list')
     else:
         form = UserCreationForm()
-    return render(request, 'user_management.html', {'form': form})
+    return render(request, 'usermanagement.html', {'form': form})
 
 # Edit an existing user
 
@@ -344,7 +346,7 @@ def edit_user(request, id):
             return redirect('user_list')
     else:
         form = UserChangeForm(instance=user)
-    return render(request, 'user_management.html', {'form': form})
+    return render(request, 'usermanagement.html', {'form': form})
 
 # Delete a user
 
@@ -354,4 +356,4 @@ def delete_user(request, id):
     if request.method == 'POST':
         user.delete()
         return redirect('user_list')
-    return render(request, 'user_management.html', {'user': user})
+    return render(request, 'usermanagement.html', {'user': user})
