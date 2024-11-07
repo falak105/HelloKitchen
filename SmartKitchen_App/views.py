@@ -34,56 +34,63 @@ def dashboard(request):
     return render(request, 'user/index.html')
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+
 def userlogin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
 
-        print(username)
-        print(password)
-        print(user)
+        # Check if the user exists
+        user_exists = User.objects.filter(username=username).exists()
+        user = authenticate(username=username, password=password)
 
         if user is not None and user.is_active:
             login(request, user)
-            # Check if the user is a super admin (superuser)
-            if user.is_superuser:
-                # Redirect to super admin dashboard
-                return redirect('admindashboard')
-            else:
-                return redirect('index')  # Redirect to user home
+            # Redirect based on user type
+            return redirect('admindashboard' if user.is_superuser else 'index')
+        
         else:
-            msg = "Please check the credentials carefully!"
+            if not user_exists:
+                msg = "User does not exist. Please register first."
+            else:
+                msg = "Incorrect password. Please try again."
+                
             return render(request, 'userlogin.html', {'msg': msg})
 
     return render(request, "userlogin.html")
-
 
 def userreg(request):
     if request.method == "POST":
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
 
         # Check if username is provided
         if not username:
             msg = "Username cannot be empty."
             return render(request, 'userreg.html', {'msg': msg})
 
+        # Check if passwords match
+        if password != confirm_password:
+            msg = "Passwords do not match. Please try again."
+            return render(request, 'userreg.html', {'msg': msg})
+
         # Check if the username already exists
         if not User.objects.filter(username=username).exists():
-            # Create the user with all required fields, including the password
+            # Create the user with the hashed password
             user = User.objects.create(username=username, email=email)
-            # Hash the password before saving the user
             user.set_password(password)
             user.save()
-            return render(request, 'userlogin.html')
+            return redirect('login')  # Redirects to the login URL name
         else:
             msg = "Username already exists. Try again!"
             return render(request, 'userreg.html', {'msg': msg})
 
     return render(request, "userreg.html")
-
 
 def userlogout(request):
     logout(request)
@@ -140,10 +147,28 @@ def userdashboard(request):
     return render(request, 'service.html')  # Ensure you have a template for this
 
 def menu(request):
-    recipes=recipe.objects.all()
-    return render(request, 'menu.html',{'recipes': recipes})
+    recipes = recipe.objects.all()
 
+    if request.method == 'POST':
+        # Get the recipe ID from the form data
+        recipe_id = request.POST.get('recipe_id')
+        if recipe_id:
+            try:
+                # Get the selected recipe by its ID
+                selected_recipe = recipe.objects.get(id=recipe_id)
+                
+                # Store the selected recipe ID in the session
+                request.session['last_recipe'] = selected_recipe.id
+                # Optional: Store the last used recipe in the user's profile or perform other actions
 
+                # Add a success message to inform the user
+                messages.success(request, f'{selected_recipe.r_name} has been saved as your last recipe!')
+            except recipe.DoesNotExist:
+                # Add an error message if the recipe ID does not exist
+                messages.error(request, 'Recipe not found!')
+
+    # Render the page with recipes and any messages
+    return render(request, 'menu.html', {'recipes': recipes})
 def service(request):
     return render(request, 'service.html')
 

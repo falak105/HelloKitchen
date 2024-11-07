@@ -4,14 +4,6 @@
 
 <body>
     <div class="container-xxl bg-white p-0">
-        <!-- Spinner Start -->
-        <!-- <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div> -->
-        <!-- Spinner End -->
-
         <!-- Menu Start -->
         <div class="container-xxl py-5 bg-dark hero-header mb-5">
             <div class="container text-center my-5 pt-5 pb-4">
@@ -41,117 +33,98 @@
                         <div class="row g-4">
                             <div class="col-lg-6">
                                 <div class="d-flex align-items-center">
-                                    <img class="flex-shrink-0 img-fluid rounded" src="img/menu-1.jpg" alt=""
+                                    <img class="flex-shrink-0 img-fluid rounded" src="{% static 'img/menu-1.jpg' %}" alt=""
                                         style="width: 80px;">
                                     <div class="w-100 d-flex flex-column text-start ps-4">
                                         <h5 class="d-flex justify-content-between border-bottom pb-2">
                                             <span>{{ recipe.r_name }}</span>
-                                            <!-- <span class="text-primary">$115</span> -->
                                         </h5>
                                         <small class="fst-italic">{{ recipe.instructions }}</small>
+                                        
+                                        <!-- Cook Button -->
+                                        <button class="btn btn-primary mt-3" onclick="showInstructions('{{ recipe.prep_time }}', '{{ recipe.instructions|escapejs }}')">Cook</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
     <!-- Menu End -->
-    <div class="col-md-6 bg-dark d-flex align-items-center">
-        <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
-            <h5 class="section-title ff-secondary text-start text-primary fw-normal">Dishes</h5>
-            <h1 class="text-white mb-4">Add Your Dishes Here</h1>
-            <form method="POST" action="{% url 'health_analysis' %}">
-                {% csrf_token %}
-                <div class="row g-3">
-                    <!-- Rcipe Name -->
-                    <div class="col-md-6">
-                        <label for="recipe-name">Recipe Name</label>
-                        <div class="form-floating">
 
-                            <input type="text" class="form-control" id="recipe-name" name="name"
-                                placeholder="Enter recipe name" required>
-                            {% if form.errors.name %}
-                            <div class="error-message">{{ form.errors.name }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <!-- Category -->
-
-                    <div class="col-md-6">
-                        <label for="recipe-category">Category</label>
-                        <div class="form-floating">
-
-                            <select id="recipe-category" name="category" required>
-                                <option value="" disabled selected>Select category</option>
-                                <option value="Breakfast">Breakfast</option>
-                                <option value="Lunch">Lunch</option>
-                                <option value="Dinner">Dinner</option>
-                                <option value="Dessert">Dessert</option>
-                                <option value="Snack">Snack</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Ingredients -->
-
-                    <div class="col-md-6">
-                        <label for="ingredients">Ingredients</label>
-                        <div class="form-floating">
-
-                            <textarea id="ingredients" name="ingredients" placeholder="List ingredients..."
-                                required></textarea>
-                            {% if form.errors.ingredients %}
-                            <div class="error-message">{{ form.errors.ingredients }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <!-- Instructions -->
-                    <div class="col-12">
-                        <label for="instructions">Instructions</label>
-                        <div class="form-floating">
-                            <textarea id="instructions" name="instructions" placeholder="Enter cooking steps..." required></textarea>
-                            {% if form.errors.instructions %}
-                            <div class="error-message">{{ form.errors.instructions }}</div>
-                            {% endif %}
-                    
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div>
-                            <label for="prep-time">Preparation Time (mins)</label>
-                            <input type="number" id="prep-time" name="prep_time" placeholder="e.g. 20" required>
-                        </div>
-                        <div>
-                            <label for="cook-time">Cooking Time (mins)</label>
-                            <input type="number" id="cook-time" name="cook_time" placeholder="e.g. 30" required>
-                        </div>
-                    </div>
-
-                    <!-- If "Other" is selected, this input field will show -->
-                    <div class="col-12" id="other-health-issue-div" style="display:none;">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="other_health_issue" name="other_health_issue"
-                                placeholder="Specify Health Issue">
-                            <label for="other_health_issue">Specify Meal Plan</label>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="col-12">
-                        
-                        <button class="btn btn-primary w-100 py-3" type="submit">Add Recipe</button>
-                    </div>
+    <!-- Modal for Instructions -->
+    <div class="modal fade" id="instructionModal" tabindex="-1" aria-labelledby="instructionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color: black; color:#ffae00;"> <!-- Modal background color and text color set to black and yellow -->
+                <div class="modal-header" style="background-color: #ffffff; color: #ffae00;">
+                    <h5 class="modal-title" id="instructionModalLabel">Cooking Instructions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: #ffae00;"></button>
                 </div>
-            </form>
+                <div class="modal-body" style="color: #ffae00;">
+                    <p><strong>Preparation Time:</strong> <span id="prepTime"></span> minutes</p>
+                    <p><strong>Instructions:</strong></p>
+                    <p id="instructionsText"></p>
+                </div>
+                <div class="modal-footer" style="background-color: #ffffff;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="color:#ffae00; border-color: #ffae00;">Close</button>
+                    <button type="button" class="btn btn-success" onclick="finishCooking()" style="background-color: #ffae00; color: black;">Done</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    {% endblock content %}
+    <script>
+        function showInstructions(prepTime, instructions) {
+            // Set preparation time and instructions in the modal
+            document.getElementById('prepTime').textContent = prepTime;
+            document.getElementById('instructionsText').textContent = instructions;
+
+            // Show the modal
+            const instructionModal = new bootstrap.Modal(document.getElementById('instructionModal'));
+            instructionModal.show();
+
+            // Start TTS for preparation time and instructions
+            speakInstructions(prepTime, instructions);
+
+            // Stop TTS when modal is closed
+            document.getElementById('instructionModal').addEventListener('hidden.bs.modal', stopSpeaking);
+        }
+
+        function speakInstructions(prepTime, instructions) {
+            if ('speechSynthesis' in window) {
+                // Combine prep time and instructions into a single string for TTS
+                const textToSpeak = `The preparation time is ${prepTime} minutes. ${instructions}`;
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = 'en-US';
+                utterance.rate = 1;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.log("TTS is not supported in this browser.");
+            }
+        }
+
+        function stopSpeaking() {
+            // Cancel any ongoing speech synthesis
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function finishCooking() {
+            // Log that the cooking is done (this could be extended to mark completion in the backend)
+            console.log("Cooking completed for this recipe.");
+
+            // Stop TTS in case it's still speaking
+            stopSpeaking();
+
+            // Hide the modal
+            const instructionModal = bootstrap.Modal.getInstance(document.getElementById('instructionModal'));
+            instructionModal.hide();
+        }
+    </script>
+
+</body>
+{% endblock content %}
