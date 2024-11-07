@@ -135,7 +135,6 @@ def userdashboard(request):
 
 
 def menu(request):
-    user = request.user
     recipes=recipe.objects.all()
     return render(request, 'menu.html',{'recipes': recipes})
 
