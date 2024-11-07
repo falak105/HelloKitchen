@@ -13,7 +13,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from google.cloud import translate_v2 as translate 
-from SmartKitchen_App.models import recipe
+from SmartKitchen_App.models import *
 
 # Create your views here.
 
@@ -117,10 +117,11 @@ def userdashboard(request):
     user = request.user  # Get the currently logged-in user
 
     # Count total recipes saved by the user
-    total_recipes = recipe.objects.count()
+    total_recipes = recipe.objects.all().count()
 
     # Count planned meals by the user
-    planned_meals = MealPlan.objects.count()
+    planned_meals = MealPlan.objects.filter(user=user).count()
+    # MealPlan.objects.filter(user=user).count()
 
     # Count shopping list items by the user
     # shopping_list_items = ShoppingList.objects.filter(user=user).count()
@@ -334,6 +335,7 @@ def query(request):
                     'prep_time': recipe_instance.prep_time,
                     'cooking_time': recipe_instance.cooking_time,
                 }
+                print(response_text)
             else:
                 response_text = "Sorry, I couldn't find a recipe with that name."
                 print("No matching recipes found.")

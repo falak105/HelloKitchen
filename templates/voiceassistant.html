@@ -28,7 +28,7 @@
         }
 
         .chat-box {
-            width: 400px;
+            width: 100%;
             background-color: #ffffff3c;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -149,24 +149,39 @@
             };
 
             function sendToServer(speechText) {
-                fetch('/query/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: JSON.stringify({ speech: speechText })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        appendMessage(data.response, 'bot');
-                        speakResponse(data.response);
-                    })
-                    .catch(error => {
-                        appendMessage('Error fetching response.', 'bot');
-                        console.error('Error:', error);
-                    });
-            }
+    fetch('/query/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ speech: speechText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (typeof data.response === 'object') {
+            // Format and append the structured recipe response
+            const recipeDetails = `
+                Name: ${data.response.name}
+                Category: ${data.response.category}
+                Ingredients: ${data.response.ingredients}
+                Instructions: ${data.response.instructions}
+                Preparation Time: ${data.response.prep_time} minutes
+                Cooking Time: ${data.response.cooking_time} minutes
+            `;
+            appendMessage(recipeDetails, 'bot');
+            speakResponse(recipeDetails);
+        } else {
+            // Append a simple response (e.g., "No matching recipes found")
+            appendMessage(data.response, 'bot');
+            speakResponse(data.response);
+        }
+    })
+    .catch(error => {
+        appendMessage('Error fetching response.', 'bot');
+        console.error('Error:', error);
+    });
+}
 
             function appendMessage(message, sender) {
                 const messageDiv = document.createElement('div');
