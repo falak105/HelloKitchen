@@ -3,7 +3,7 @@
 {% block content %}
 
 <head>
-    
+
     <style>
         body {
             background-image: url(/static/img/bg_log.png);
@@ -65,11 +65,14 @@
             background: #f9f9f9;
         }
 
-        table, th, td {
+        table,
+        th,
+        td {
             border: 1px solid #ddd;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
         }
@@ -83,7 +86,7 @@
             margin-top: 30px;
             text-align: center;
         }
-        
+
         .bar {
             width: 20%;
             height: 20px;
@@ -111,25 +114,102 @@
         <!-- Recommendations for Each Health Issue -->
         <div class="data-block">
             <h2 style="color: #ffae00;">Recommendations</h2>
-            {% for rec in recommendations %}
+            {% if health_analysis.health_issue == "Diabetes" %}
             <div class="recommendation">
-                <h3>{{ rec.issue }}</h3>
+                <h3>Diabetes</h3>
                 <p><strong>Recommended to Eat:</strong></p>
                 <ul>
-                    {% for food in rec.food %}
-                    <li>{{ food }}</li>
-                    {% endfor %}
+                    <li>Leafy Greens</li>
+                    <li>Whole Grains</li>
+                    <li>Fish</li>
+                    <li>Nuts</li>
                 </ul>
                 <p><strong>Recommended to Avoid:</strong></p>
                 <ul>
-                    {% for avoid in rec.avoid %}
-                    <li>{{ avoid }}</li>
-                    {% endfor %}
+                    <li>Sugary Drinks</li>
+                    <li>White Bread</li>
+                    <li>Processed Foods</li>
                 </ul>
-                <p><strong>Tips:</strong> {{ rec.tips }}</p>
+                <p><strong>Tips:</strong> Monitor blood sugar levels regularly and maintain a balanced diet.</p>
             </div>
-            {% endfor %}
+            {% elif health_analysis.health_issue == "Hypertension" %}
+            <div class="recommendation">
+                <h3>Hypertension</h3>
+                <p><strong>Recommended to Eat:</strong></p>
+                <ul>
+                    <li>Bananas</li>
+                    <li>Leafy Greens</li>
+                    <li>Oatmeal</li>
+                    <li>Garlic</li>
+                </ul>
+                <p><strong>Recommended to Avoid:</strong></p>
+                <ul>
+                    <li>Salt</li>
+                    <li>Alcohol</li>
+                    <li>Caffeine</li>
+                </ul>
+                <p><strong>Tips:</strong> Regular exercise and reducing sodium intake can help manage blood pressure.
+                </p>
+            </div>
+            {% elif health_analysis.health_issue == "Obesity" %}
+            <div class="recommendation">
+                <h3>Obesity</h3>
+                <p><strong>Recommended to Eat:</strong></p>
+                <ul>
+                    <li>Lean Proteins</li>
+                    <li>Vegetables</li>
+                    <li>Fruits</li>
+                    <li>Whole Grains</li>
+                </ul>
+                <p><strong>Recommended to Avoid:</strong></p>
+                <ul>
+                    <li>Sugary Snacks</li>
+                    <li>Fast Food</li>
+                    <li>Soda</li>
+                </ul>
+                <p><strong>Tips:</strong> Incorporate regular physical activity and avoid calorie-dense foods.</p>
+            </div>
+            {% elif health_analysis.health_issue == "High Cholesterol" %}
+            <div class="recommendation">
+                <h3>High Cholesterol</h3>
+                <p><strong>Recommended to Eat:</strong></p>
+                <ul>
+                    <li>Oats</li>
+                    <li>Barley</li>
+                    <li>Nuts</li>
+                    <li>Fatty Fish</li>
+                </ul>
+                <p><strong>Recommended to Avoid:</strong></p>
+                <ul>
+                    <li>Red Meat</li>
+                    <li>Full-fat Dairy</li>
+                    <li>Fried Foods</li>
+                </ul>
+                <p><strong>Tips:</strong> Include soluble fiber in the diet and exercise regularly to improve
+                    cholesterol levels.</p>
+            </div>
+            {% elif health_analysis.health_issue == "Sugar" %}
+            <div class="recommendation">
+                <h3>Sugar</h3>
+                <p><strong>Recommended to Eat:</strong></p>
+                <ul>
+                    <li>Whole Grains</li>
+                    <li>Nuts</li>
+                    <li>Legumes</li>
+                    <li>Non-Starchy Veggies</li>
+                </ul>
+                <p><strong>Recommended to Avoid:</strong></p>
+                <ul>
+                    <li>Refined Sugar</li>
+                    <li>White Flour</li>
+                    <li>Fruit Juice</li>
+                </ul>
+                <p><strong>Tips:</strong> Limit intake of added sugars and focus on low glycemic index foods.</p>
+            </div>
+            {% endif %}
         </div>
+
+
 
         <!-- Graphical Representation -->
         <div class="graph-container">
@@ -142,5 +222,9 @@
             </div>
         </div>
     </div>
+
+
+   
+
 </body>
 {% endblock content %}
