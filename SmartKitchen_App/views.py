@@ -288,6 +288,32 @@ def health_analysis_report(request):
         'total_food_to_avoid': total_food_to_avoid,
     })
 
+    # Sample data for BMI trend over time (replace with real data)
+    bmi_trend = [24, 25, 26, 24.5, 25.3, 23.9]  # Sample BMI values
+    bmi_dates = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]  # Corresponding months
+
+    # Sample data for Food Recommendation Bar Chart
+    recommended_foods_count = 10  # Replace with actual data
+    foods_to_avoid_count = 5  # Replace with actual data
+
+    # Sample data for Exercise vs. Sedentary Time Radar Chart
+    activity_data = {
+        "Exercise": 7,
+        "Sedentary": 5,
+        "Moderate Activity": 3,
+        "Light Activity": 4
+    }
+
+    return render(request, 'health.html', {
+        'bmi_status_data_json': json.dumps(bmi_status_data),
+        'bmi_trend': json.dumps(bmi_trend),
+        'bmi_dates': json.dumps(bmi_dates),
+        'recommended_foods_count': recommended_foods_count,
+        'foods_to_avoid_count': foods_to_avoid_count,
+        'activity_data': json.dumps(activity_data),
+    })
+
+
 def vassi(request):
     return render(request, 'voiceassistant.html')
 # def dashboard(request):
