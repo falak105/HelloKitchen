@@ -183,30 +183,29 @@
                 <form method="POST" action="{% url 'health_analysis' %}">
                     {% csrf_token %}
                     <div class="row g-3">
-                        <!-- breakfast -->
-                        <div class="col-md-6">
+                        <!-- period -->
+                        <div class="col-12">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="weight"  name="weight" placeholder="Your Weight">
-                                <label for="weight" name="weight">Breakfast</label>
+                                <select class="form-select" id="health_issues" name="health_issues" onchange="toggleOtherHealthIssue()">
+                                    <option value="" disabled selected>Select your Meals</option>
+                                    <option value="BreakFast">BreakFast</option>
+                                    <option value="Lunch">Lunch</option>
+                                    <option value="Dinner">Dinner</option>
+                                    
+                                    
+                                </select>
+                                <label for="health_issues" name="health_issues">3 Main Meals</label>
                             </div>
                         </div>
                         
                         <!-- Lunch -->
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="height" name="height" placeholder="Your Height">
-                                <label for="height" name="height">Lunch</label>
+                                <label for="height" name="height">Dish</label>
                             </div>
                         </div>
 
-                        <!-- Dinner -->
-
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="height" name="height" placeholder="Your Height">
-                                <label for="height" name="height">Dinner</label>
-                            </div>
-                        </div>
         
                         <!-- Time -->
                         <div class="col-12">

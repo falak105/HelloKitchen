@@ -3,9 +3,9 @@ from .models import *
 from django.utils.translation import gettext_lazy as _
 
 admin.site.register(recipe)
-admin.site.register(HealthAnalysis)
+admin.site.register(healthAnalysis)
 admin.site.register(MealPlan)
-# admin.site.register(Response)
+
 
 
 # class CustomUserAdmin(UserAdmin):

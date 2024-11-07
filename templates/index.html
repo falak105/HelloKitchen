@@ -121,8 +121,8 @@
                             <div class="d-flex align-items-center border-start border-5 border-primary px-3">
                                 <h1 class="flex-shrink-0 display-5 text-primary mb-0" data-toggle="counter-up">15</h1>
                                 <div class="ps-4">
-                                    <p class="mb-0">Years of</p>
-                                    <h6 class="text-uppercase mb-0">Experience</h6>
+                                    <p class="mb-0">Types of</p>
+                                    <h6 class="text-uppercase mb-0">Cusines</h6>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                             </div>
                         </div>
                     </div>
-                    <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a>
+                    <!-- <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a> -->
                 </div>
             </div>
         </div>
@@ -168,7 +168,7 @@
                                 <div class="form-floating">
                                     <input type="text" class="form-control" id="weight" name="weight"
                                         placeholder="Your Weight">
-                                    <label for="weight" name="weight">Weight (in kg)</label>
+                                    <label for="weight">Weight (in kg)</label>
                                 </div>
                             </div>
 
@@ -177,7 +177,7 @@
                                 <div class="form-floating">
                                     <input type="text" class="form-control" id="height" name="height"
                                         placeholder="Your Height">
-                                    <label for="height" name="height">Height (in cm)</label>
+                                    <label for="height">Height (in cm)</label>
                                 </div>
                             </div>
 
@@ -194,7 +194,16 @@
                                         <option value="Sugar">High Sugar</option>
                                         <option value="Other">Other</option>
                                     </select>
-                                    <label for="health_issues" name="health_issues">Common Health Issues</label>
+                                    <label for="health_issues">Common Health Issues</label>
+                                </div>
+                            </div>
+
+                            <!-- Level of Disease -->
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="level" name="level"
+                                        placeholder="Level of Disease" required>
+                                    <label for="level">Level of Disease</label>
                                 </div>
                             </div>
 
@@ -203,7 +212,7 @@
                                 <div class="form-floating">
                                     <input type="text" class="form-control" id="other_health_issue"
                                         name="other_health_issue" placeholder="Specify Health Issue">
-                                    <label for="other_health_issue">Specify Health Issue</label>
+                                    <label for="other_health_issue">Any Other Health Issues</label>
                                 </div>
                             </div>
 
@@ -215,169 +224,186 @@
                                 <a hr ef="{% url 'userlogin' %}" class="btn btn-primary w-100 py-3">Submit Health
                                     Analysis</a>
                                 {% endif %}
-
-
+                        
+                        
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-
-
-
         </div>
     </div>
-    <script>
-        // Function to show/hide the 'Other' input field
-        function toggleOtherHealthIssue() {
-            const healthIssueSelect = document.getElementById('health_issues');
-            const otherHealthIssueDiv = document.getElementById('other-health-issue-div');
 
-            if (healthIssueSelect.value === 'Other') {
-                otherHealthIssueDiv.style.display = 'block';  // Show the input field
-            } else {
-                otherHealthIssueDiv.style.display = 'none';  // Hide the input field
-            }
+    <!-- <div class="col-12">
+        {% if user.is_authenticated %}
+        <button class="btn btn-primary w-100 py-3" type="submit">Submit Health Analysis</button>
+        {% else %}
+        <a hr ef="{% url 'userlogin' %}" class="btn btn-primary w-100 py-3">Submit Health
+            Analysis</a>
+        {% endif %}
+
+
+    </div> -->
+</div>
+</form>
+</div>
+</div>
+
+
+
+</div>
+</div>
+<script>
+    // Function to show/hide the 'Other' input field
+    function toggleOtherHealthIssue() {
+        const healthIssueSelect = document.getElementById('health_issues');
+        const otherHealthIssueDiv = document.getElementById('other-health-issue-div');
+
+        if (healthIssueSelect.value === 'Other') {
+            otherHealthIssueDiv.style.display = 'block';  // Show the input field
+        } else {
+            otherHealthIssueDiv.style.display = 'none';  // Hide the input field
         }
-    </script>
+    }
+</script>
 
 
-    <!-- Reservation Start -->
+<!-- Reservation Start -->
 
 
-    <!-- Team Start -->
-    <div class="container-xxl pt-5 pb-3">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h5 class="section-title ff-secondary text-center text-primary fw-normal">Team Members</h5>
-                <h1 class="mb-5">Our Master Chefs</h1>
+<!-- Team Start -->
+<div class="container-xxl pt-5 pb-3">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h5 class="section-title ff-secondary text-center text-primary fw-normal">Our Consultants</h5>
+            <h1 class="mb-5">Our Doctors for consulting</h1>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="team-item text-center rounded overflow-hidden">
+                    <div class="rounded-circle overflow-hidden m-4">
+                        <img class="img-fluid" src="{% static 'img/Doc1.jpg' %}" alt="">
+                    </div>
+                    <h5 class="mb-0">Dr.Christina Fernandez</h5>
+                    <small>Cardiologist</small>
+                    <div class="d-flex justify-content-center mt-3">
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
             </div>
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item text-center rounded overflow-hidden">
-                        <div class="rounded-circle overflow-hidden m-4">
-                            <img class="img-fluid" src="{% static 'img/team-1.jpg' %}" alt="">
-                        </div>
-                        <h5 class="mb-0">Full Name</h5>
-                        <small>Designation</small>
-                        <div class="d-flex justify-content-center mt-3">
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                        </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="team-item text-center rounded overflow-hidden">
+                    <div class="rounded-circle overflow-hidden m-4">
+                        <img class="img-fluid" src="{% static 'img/Doc2.jpg' %}" alt="">
+                    </div>
+                    <h5 class="mb-0">Dr.Aby Mathew</h5>
+                    <small>Pediatrician</small>
+                    <div class="d-flex justify-content-center mt-3">
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="team-item text-center rounded overflow-hidden">
-                        <div class="rounded-circle overflow-hidden m-4">
-                            <img class="img-fluid" src="{% static 'img/team-2.jpg' %}" alt="">
-                        </div>
-                        <h5 class="mb-0">Full Name</h5>
-                        <small>Designation</small>
-                        <div class="d-flex justify-content-center mt-3">
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                        </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="team-item text-center rounded overflow-hidden">
+                    <div class="rounded-circle overflow-hidden m-4">
+                        <img class="img-fluid" src="{% static 'img/Doc3.jpg' %}" alt="">
+                    </div>
+                    <h5 class="mb-0">Dr.Aisha Sebastian</h5>
+                    <small>Dietitian</small>
+                    <div class="d-flex justify-content-center mt-3">
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="team-item text-center rounded overflow-hidden">
-                        <div class="rounded-circle overflow-hidden m-4">
-                            <img class="img-fluid" src="{% static 'img/team-3.jpg' %}" alt="">
-                        </div>
-                        <h5 class="mb-0">Full Name</h5>
-                        <small>Designation</small>
-                        <div class="d-flex justify-content-center mt-3">
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                        </div>
+            </div>
+            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
+                <div class="team-item text-center rounded overflow-hidden">
+                    <div class="rounded-circle overflow-hidden m-4">
+                        <img class="img-fluid" src="{% static 'img/Doc4.jpg' %}" alt="">
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                    <div class="team-item text-center rounded overflow-hidden">
-                        <div class="rounded-circle overflow-hidden m-4">
-                            <img class="img-fluid" src="{% static 'img/team-4.jpg' %}" alt="">
-                        </div>
-                        <h5 class="mb-0">Full Name</h5>
-                        <small>Designation</small>
-                        <div class="d-flex justify-content-center mt-3">
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                        </div>
+                    <h5 class="mb-0">Dr. Issac Mathew</h5>
+                    <small>Endocrinologist</small>
+                    <div class="d-flex justify-content-center mt-3">
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Team End -->
+</div>
+<!-- Team End -->
 
 
-    <!-- Testimonial Start -->
-    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="text-center">
-                <h5 class="section-title ff-secondary text-center text-primary fw-normal">Testimonial</h5>
-                <h1 class="mb-5">Our Clients Say!!!</h1>
+<!-- Testimonial Start -->
+<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container">
+        <div class="text-center">
+            <h5 class="section-title ff-secondary text-center text-primary fw-normal">Testimonial</h5>
+            <h1 class="mb-5">Our Clients Say!!!</h1>
+        </div>
+        <div class="owl-carousel testimonial-carousel">
+            <div class="testimonial-item bg-transparent border rounded p-4">
+                <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                <p>Feeling great to use this application, it is so helpfull
+                </p>
+                <div class="d-flex align-items-center">
+                    <img class="img-fluid flex-shrink-0 rounded-circle" src="{% static 'img/testimonial-1.jpg' %}"
+                        style="width: 50px; height: 50px;">
+                    <div class="ps-3">
+                        <h5 class="mb-1">Client Name</h5>
+                        <small>Profession</small>
+                    </div>
+                </div>
             </div>
-            <div class="owl-carousel testimonial-carousel">
-                <div class="testimonial-item bg-transparent border rounded p-4">
-                    <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                    <p>Feeling great to use this application, it is so helpfull 
-                    </p>
-                    <div class="d-flex align-items-center">
-                        <img class="img-fluid flex-shrink-0 rounded-circle" src="{% static 'img/testimonial-1.jpg' %}"
-                            style="width: 50px; height: 50px;">
-                        <div class="ps-3">
-                            <h5 class="mb-1">Client Name</h5>
-                            <small>Profession</small>
-                        </div>
+            <div class="testimonial-item bg-transparent border rounded p-4">
+                <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam
+                </p>
+                <div class="d-flex align-items-center">
+                    <img class="img-fluid flex-shrink-0 rounded-circle" src="{% static 'img/testimonial-2.jpg' %}"
+                        style="width: 50px; height: 50px;">
+                    <div class="ps-3">
+                        <h5 class="mb-1">Client Name</h5>
+                        <small>Profession</small>
                     </div>
                 </div>
-                <div class="testimonial-item bg-transparent border rounded p-4">
-                    <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                    <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam
-                    </p>
-                    <div class="d-flex align-items-center">
-                        <img class="img-fluid flex-shrink-0 rounded-circle" src="{% static 'img/testimonial-2.jpg' %}"
-                            style="width: 50px; height: 50px;">
-                        <div class="ps-3">
-                            <h5 class="mb-1">Client Name</h5>
-                            <small>Profession</small>
-                        </div>
+            </div>
+            <div class="testimonial-item bg-transparent border rounded p-4">
+                <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam
+                </p>
+                <div class="d-flex align-items-center">
+                    <img class="img-fluid flex-shrink-0 rounded-circle" src="{% static 'img/testimonial-3.jpg' %}"
+                        style="width: 50px; height: 50px;">
+                    <div class="ps-3">
+                        <h5 class="mb-1">Client Name</h5>
+                        <small>Profession</small>
                     </div>
                 </div>
-                <div class="testimonial-item bg-transparent border rounded p-4">
-                    <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                    <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam
-                    </p>
-                    <div class="d-flex align-items-center">
-                        <img class="img-fluid flex-shrink-0 rounded-circle" src="{% static 'img/testimonial-3.jpg' %}"
-                            style="width: 50px; height: 50px;">
-                        <div class="ps-3">
-                            <h5 class="mb-1">Client Name</h5>
-                            <small>Profession</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item bg-transparent border rounded p-4">
-                    <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                    <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam
-                    </p>
-                    <div class="d-flex align-items-center">
-                        <img class="img-fluid flex-shrink-0 rounded-circle" src="{% static 'img/testimonial-4.jpg' %}"
-                            style="width: 50px; height: 50px;">
-                        <div class="ps-3">
-                            <h5 class="mb-1">Client Name</h5>
-                            <small>Profession</small>
-                        </div>
+            </div>
+            <div class="testimonial-item bg-transparent border rounded p-4">
+                <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                <p>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam
+                </p>
+                <div class="d-flex align-items-center">
+                    <img class="img-fluid flex-shrink-0 rounded-circle" src="{% static 'img/testimonial-4.jpg' %}"
+                        style="width: 50px; height: 50px;">
+                    <div class="ps-3">
+                        <h5 class="mb-1">Client Name</h5>
+                        <small>Profession</small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Testimonial End -->
+</div>
+<!-- Testimonial End -->
 
-    {% endblock content %}
+{% endblock content %}

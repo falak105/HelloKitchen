@@ -120,7 +120,7 @@ def userdashboard(request):
     total_recipes = recipe.objects.all().count()
 
     # Count planned meals by the user
-    planned_meals = MealPlan.objects.filter(user=user).count()
+   ## planned_meals = MealPlan.objects.filter(user=user).count()
     # MealPlan.objects.filter(user=user).count()
 
     # Count shopping list items by the user
@@ -128,12 +128,16 @@ def userdashboard(request):
 
     context = {
         'total_recipes': total_recipes,
-        'planned_meals': planned_meals,
+        ##'planned_meals': planned_meals,
         # 'shopping_list_items': shopping_list_items,
     }
 
     return render(request, 'user_dashboard.html', context)
 
+
+    
+    # If GET request, render meal plan form
+    return render(request, 'service.html')  # Ensure you have a template for this
 
 def menu(request):
     recipes=recipe.objects.all()
@@ -184,39 +188,56 @@ def create_recipe(request):  # Keep your function name as is
     return render(request, 'admin/recipe.html')
 
 
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .models import healthAnalysis  # Ensure correct model import
+
 def health_analysis(request):
     if request.method == 'POST':
         weight = request.POST.get('weight')
         height = request.POST.get('height')
+        level = request.POST.get('level')
         health_issue = request.POST.get('health_issues')
-        other_health_issue = request.POST.get(
-            'other_health_issue') if health_issue == 'Other' else None
+        other_health_issue = request.POST.get('other_health_issue') if health_issue == 'Other' else None
 
-        # Save data to the database
-        HealthAnalysis.objects.create(
-            weight=weight,
-            height=height,
-            health_issue=health_issue,
-            other_health_issue=other_health_issue
-        )
-        # Redirect to the index page or a success message
-        # Assuming 'index' is the URL name for the home page
-        return redirect('user_dashboard')
+        # Ensure all required fields are provided
+        if weight and height and level and health_issue:
+            # Save data to the database
+            healthAnalysis.objects.create(
+                weight=weight,
+                height=height,
+                level=level,
+                health_issue=health_issue,
+                other_health_issue=other_health_issue
+            )
+
+            # Redirect to the health analysis report after saving
+            return redirect('health_analysis_report')
+        else:
+            # If any fields are missing, return to form with an error
+            return render(request, 'index.html', {'error': 'Please fill out all required fields.'})
+    
+    # Render the form page for GET request
+    return render(request, 'index.html')
 
 
 def health_analysis_report(request):
     # Get the latest health analysis data for the user
-    health_analysis = HealthAnalysis.objects.filter().last()
+    health_analysis = healthAnalysis.objects.filter().last()
 
-    # Check if health_analysis is None
     if health_analysis is None:
         # Return an appropriate response if no health data is found
         return HttpResponse("No health data available for analysis.")
 
-    # Calculate BMI (Body Mass Index) = weight (kg) / (height (m))^2
+    # Calculate BMI (Body Mass Index)
     height_in_meters = health_analysis.height / 100
     bmi = health_analysis.weight / (height_in_meters ** 2)
-    bmi_status = "Underweight" if bmi < 18.5 else "Normal weight" if bmi < 25 else "Overweight" if bmi < 30 else "Obese"
+    bmi_status = (
+        "Underweight" if bmi < 18.5 else
+        "Normal weight" if bmi < 25 else
+        "Overweight" if bmi < 30 else
+        "Obese"
+    )
 
     # Basic recommendations based on health issue
     recommendations = {
@@ -247,29 +268,25 @@ def health_analysis_report(request):
         },
     }
 
-    # Collect recommendations for all health issues
+    # Collect recommendations for each health issue
     all_recommendations = []
     for issue, rec in recommendations.items():
         rec['issue'] = issue
         all_recommendations.append(rec)
 
     # Prepare data for the graph
-    total_food_recommended = sum(
-        [len(rec.get('food', [])) for rec in all_recommendations])
-    total_food_to_avoid = sum([len(rec.get('avoid', []))
-                              for rec in all_recommendations])
+    total_food_recommended = sum(len(rec.get('food', [])) for rec in all_recommendations)
+    total_food_to_avoid = sum(len(rec.get('avoid', [])) for rec in all_recommendations)
 
     # Render the health report
     return render(request, 'health.html', {
         'health_analysis': health_analysis,
-        # Round BMI to two decimal places for better readability
         'bmi': round(bmi, 2),
         'bmi_status': bmi_status,
         'recommendations': all_recommendations,
         'total_food_recommended': total_food_recommended,
         'total_food_to_avoid': total_food_to_avoid,
     })
-
 
 def vassi(request):
     return render(request, 'voiceassistant.html')

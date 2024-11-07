@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.contrib.auth.models import AbstractUser
+
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
 class recipe(models.Model):
@@ -16,7 +16,7 @@ class recipe(models.Model):
     def __str__(self):
         return self.r_name
     
-class HealthAnalysis(models.Model):
+class healthAnalysis(models.Model):
     HEALTH_ISSUES = [
         ('Diabetes', 'Diabetes'),
         ('Hypertension', 'Hypertension'),
@@ -28,7 +28,9 @@ class HealthAnalysis(models.Model):
 
     weight = models.DecimalField(max_digits=5, decimal_places=2)  # Weight in kg
     height = models.DecimalField(max_digits=5, decimal_places=2)  # Height in cm
+    level = models.IntegerField(null=False, default=0)
     health_issue = models.CharField(max_length=50, choices=HEALTH_ISSUES)
+    
     other_health_issue = models.CharField(max_length=255, blank=True, null=True)  # Optional field for "Other" selection
 
     def __str__(self):
