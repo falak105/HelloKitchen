@@ -413,8 +413,9 @@
                     <div class="col-md-6">
                         <label for="recipe-name">Recipe Name</label>
                         <div class="form-floating">
-                            
-                            <input type="text" class="form-control" id="recipe-name" name="name"placeholder="Enter recipe name" required>
+
+                            <input type="text" class="form-control" id="recipe-name" name="name"
+                                placeholder="Enter recipe name" required>
                             {% if form.errors.name %}
                             <div class="error-message">{{ form.errors.name }}</div>
                             {% endif %}
@@ -426,7 +427,7 @@
                     <div class="col-md-6">
                         <label for="recipe-category">Category</label>
                         <div class="form-floating">
-                            
+
                             <select id="recipe-category" name="category" required>
                                 <option value="" disabled selected>Select category</option>
                                 <option value="Breakfast">Breakfast</option>
@@ -438,12 +439,12 @@
                         </div>
                     </div>
 
-                    <!-- Dinner -->
+                    <!-- Ingredients -->
 
                     <div class="col-md-6">
                         <label for="ingredients">Ingredients</label>
                         <div class="form-floating">
-                            
+
                             <textarea id="ingredients" name="ingredients" placeholder="List ingredients..."
                                 required></textarea>
                             {% if form.errors.ingredients %}
@@ -452,20 +453,26 @@
                         </div>
                     </div>
 
-                    <!-- Time -->
+                    <!-- Instructions -->
                     <div class="col-12">
+                        <label for="instructions">Instructions</label>
                         <div class="form-floating">
-                            <select class="form-select" id="health_issues" name="health_issues"
-                                onchange="toggleOtherHealthIssue()">
-                                <option value="" disabled selected>Set your reminder</option>
-                                <option value="Before 1hr of food">Before 1hr of food</option>
-                                <option value="Before 45 mins of food">Before 45 mins of food</option>
-                                <option value="Before 30 mins of food">Before 30 mins of food</option>
-                                <option value="Before 15 mins of food">Before 15 mins of food</option>
-                                <option value="Before 5 mins of food">Before 5 mins of food</option>
+                            <textarea id="instructions" name="instructions" placeholder="Enter cooking steps..." required></textarea>
+                            {% if form.errors.instructions %}
+                            <div class="error-message">{{ form.errors.instructions }}</div>
+                            {% endif %}
+                    
+                        </div>
+                    </div>
 
-                            </select>
-                            <label for="health_issues" name="health_issues">Common Timeings</label>
+                    <div class="form-group">
+                        <div>
+                            <label for="prep-time">Preparation Time (mins)</label>
+                            <input type="number" id="prep-time" name="prep_time" placeholder="e.g. 20" required>
+                        </div>
+                        <div>
+                            <label for="cook-time">Cooking Time (mins)</label>
+                            <input type="number" id="cook-time" name="cook_time" placeholder="e.g. 30" required>
                         </div>
                     </div>
 
@@ -480,7 +487,8 @@
 
                     <!-- Submit Button -->
                     <div class="col-12">
-                        <button class="btn btn-primary w-100 py-3" type="submit">Submit Your Meal Plan</button>
+                        
+                        <button class="btn btn-primary w-100 py-3" type="submit">Add Recipe</button>
                     </div>
                 </div>
             </form>
