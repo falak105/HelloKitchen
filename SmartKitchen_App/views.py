@@ -283,33 +283,66 @@ def vassi(request):
 # handle to speech queries
 
 
+# @csrf_exempt
+# def query(request):
+#     if request.method == 'POST':
+#         body_unicode = request.body.decode('utf-8')
+#         body_data = json.loads(body_unicode)
+#         speech_text = body_data.get('speech', '')
+
+#         # Basic dataset response
+#         dataset = {
+#             "hello": "Hi there! How can I help you today?",
+#             "weather": "The weather is sunny and warm today.",
+#             "your name": "I am your personal voice assistant.",
+#             "time": "I am not sure about the exact time, but you can always check your watch.",
+#             "breakfast": "paalappam with creamy nutfinished duck curry",
+#             "lunch": "hot rice with chicken currry and meen curry with aviyal and yellow moru with some hot sambar combo also haing some payar curry and achar!!",
+#             "dinner": "take some morinja hot porotta and take some piece of pork or beaf curry and have it like yum yum!!",
+#             "duck": "cut the duck into small pieces and maranite with the appropriate masala you like and wait for hrs to settle the maranite into the duck, later take it into hot boiling oil and put some onions and tomatos into it, then put some water and wait.. it will be cooked! later take out the curry from beaker and have it yummy yummy!",
+#             "എടാ": "enthada kuttah..!!",
+#             "കോഴിക്കറി": "ചിക്കൻ ചെറിയ കഷണങ്ങളായി മുറിച്ച് മസാലപ്പൊടി ഉപയോഗിച്ച് മാരിനേറ്റ് ചെയ്ത് 1 മണിക്കൂർ കാത്തിരിക്കുക, എന്നിട്ട് തിളപ്പിച്ച എണ്ണയിൽ ചട്ടിയിൽ ഇട്ടു 7-8 മിനിറ്റ് ഫ്രൈ ചെയ്യുക",
+#             "मुर्गी करी": "चिकन को छोटे-छोटे टुकड़ों में काट लें, मसाला पाउडर के साथ मैरीनेट करें और 1 घंटे तक इंतजार करें, फिर इसे उबलते तेल में एक पैन में डालें और 7-8 मिनट तक भूनें।",
+#         }
+
+#         response_text = dataset.get(speech_text.lower(), "Sorry, I didn't understand that.")
+
+#         return JsonResponse({'response': response_text})
+#     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
 @csrf_exempt
 def query(request):
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
         body_data = json.loads(body_unicode)
-        speech_text = body_data.get('speech', '')
+        speech_text = body_data.get('speech', '').strip().lower()
+        print(f"User input: {speech_text}")
 
-        # Basic dataset response
-        dataset = {
-            "hello": "Hi there! How can I help you today?",
-            "weather": "The weather is sunny and warm today.",
-            "your name": "I am your personal voice assistant.",
-            "time": "I am not sure about the exact time, but you can always check your watch.",
-            "breakfast": "paalappam with creamy nutfinished duck curry",
-            "lunch": "hot rice with chicken currry and meen curry with aviyal and yellow moru with some hot sambar combo also haing some payar curry and achar!!",
-            "dinner": "take some morinja hot porotta and take some piece of pork or beaf curry and have it like yum yum!!",
-            "duck": "cut the duck into small pieces and maranite with the appropriate masala you like and wait for hrs to settle the maranite into the duck, later take it into hot boiling oil and put some onions and tomatos into it, then put some water and wait.. it will be cooked! later take out the curry from beaker and have it yummy yummy!",
-            "എടാ": "enthada kuttah..!!",
-            "കോഴിക്കറി": "ചിക്കൻ ചെറിയ കഷണങ്ങളായി മുറിച്ച് മസാലപ്പൊടി ഉപയോഗിച്ച് മാരിനേറ്റ് ചെയ്ത് 1 മണിക്കൂർ കാത്തിരിക്കുക, എന്നിട്ട് തിളപ്പിച്ച എണ്ണയിൽ ചട്ടിയിൽ ഇട്ടു 7-8 മിനിറ്റ് ഫ്രൈ ചെയ്യുക",
-            "मुर्गी करी": "चिकन को छोटे-छोटे टुकड़ों में काट लें, मसाला पाउडर के साथ मैरीनेट करें और 1 घंटे तक इंतजार करें, फिर इसे उबलते तेल में एक पैन में डालें और 7-8 मिनट तक भूनें।",
-        }
-
-        response_text = dataset.get(speech_text.lower(), "Sorry, I didn't understand that.")
+        # Attempt to find recipes containing the provided name in the speech_text
+        matching_recipes = recipe.objects.filter(r_name__icontains=speech_text)
+        print(f"Matching recipes: {matching_recipes}")
+        
+        if matching_recipes.exists():
+            # Get the first matching recipe for simplicity (or modify to return multiple if needed)
+            recipe_instance = matching_recipes.first()
+            
+            # Prepare the response with the recipe details
+            response_text = {
+                'name': recipe_instance.r_name,
+                'category': recipe_instance.category,
+                'ingredients': recipe_instance.ingridents,
+                'instructions': recipe_instance.instructions,
+                'prep_time': recipe_instance.prep_time,
+                'cooking_time': recipe_instance.cooking_time,
+            }
+        else:
+            # If no matching recipes are found, send a default message
+            response_text = "Sorry, I couldn't find a recipe with that name."
 
         return JsonResponse({'response': response_text})
+    
     return JsonResponse({'error': 'Invalid request'}, status=400)
-
 
 def usermanagement(request):
     return render(request, 'usermanagement.html')
@@ -357,3 +390,22 @@ def delete_user(request, id):
         user.delete()
         return redirect('user_list')
     return render(request, 'usermanagement.html', {'user': user})
+
+def MealPlan(request):
+    if request.method == 'POST':
+        BreakFast = request.POST.get('Breakfast')
+        Lunch = request.POST.get('Lunch')
+        Dinner = request.POST.get('Dinner')
+        Date = request.POST.get(
+            'Date') if MealPlan == 'Other' else None
+
+        # Save data to the database
+        MealPlan.objects.create(
+            BreakFast=BreakFast,
+            Lunch=Lunch,
+            Dinner=Dinner,
+            Date=Date
+        )
+        # Redirect to the index page or a success message
+        # Assuming 'index' is the URL name for the home page
+        return redirect('user_dashboard')
