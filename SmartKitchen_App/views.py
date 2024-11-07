@@ -13,7 +13,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from google.cloud import translate_v2 as translate 
-
+from SmartKitchen_App.models import recipe
 
 # Create your views here.
 
@@ -314,35 +314,39 @@ def vassi(request):
 @csrf_exempt
 def query(request):
     if request.method == 'POST':
-        body_unicode = request.body.decode('utf-8')
-        body_data = json.loads(body_unicode)
-        speech_text = body_data.get('speech', '').strip().lower()
-        print(f"User input: {speech_text}")
+        try:
+            body_unicode = request.body.decode('utf-8')
+            body_data = json.loads(body_unicode)
+            speech_text = body_data.get('speech', '').strip().lower()
+            print(f"User input: {speech_text}")
 
-        # Attempt to find recipes containing the provided name in the speech_text
-        matching_recipes = recipe.objects.filter(r_name__icontains=speech_text)
-        print(f"Matching recipes: {matching_recipes}")
-        
-        if matching_recipes.exists():
-            # Get the first matching recipe for simplicity (or modify to return multiple if needed)
-            recipe_instance = matching_recipes.first()
-            
-            # Prepare the response with the recipe details
-            response_text = {
-                'name': recipe_instance.r_name,
-                'category': recipe_instance.category,
-                'ingredients': recipe_instance.ingridents,
-                'instructions': recipe_instance.instructions,
-                'prep_time': recipe_instance.prep_time,
-                'cooking_time': recipe_instance.cooking_time,
-            }
-        else:
-            # If no matching recipes are found, send a default message
-            response_text = "Sorry, I couldn't find a recipe with that name."
+            # Attempt to find recipes containing the provided name
+            matching_recipes = recipe.objects.filter(r_name__icontains=speech_text)
+            print(f"Matching recipes count: {matching_recipes.count()}")
 
-        return JsonResponse({'response': response_text})
-    
+            if matching_recipes.exists():
+                recipe_instance = matching_recipes.first()
+                print(f"Found recipe: {recipe_instance.r_name}")
+                response_text = {
+                    'name': recipe_instance.r_name,
+                    'category': recipe_instance.category,
+                    'ingredients': recipe_instance.ingridents,
+                    'instructions': recipe_instance.instructions,
+                    'prep_time': recipe_instance.prep_time,
+                    'cooking_time': recipe_instance.cooking_time,
+                }
+            else:
+                response_text = "Sorry, I couldn't find a recipe with that name."
+                print("No matching recipes found.")
+
+            return JsonResponse({'response': response_text})
+        except Exception as e:
+            print(f"Error: {e}")
+            return JsonResponse({'error': 'Internal server error'}, status=500)
+
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
 
 def usermanagement(request):
     return render(request, 'usermanagement.html')

@@ -61,7 +61,7 @@
 
         button:active::first-letter {
             content: '';
-            position:unset;
+            position: unset;
             width: 120px;
             height: 120px;
             border-radius: 50%;
@@ -119,87 +119,88 @@
     </center>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-        const startButton = document.getElementById('startButton');
-        const outputBox = document.getElementById('output');
-        const languageSelect = document.getElementById('languageSelect');
+            const startButton = document.getElementById('startButton');
+            const outputBox = document.getElementById('output');
+            const languageSelect = document.getElementById('languageSelect');
 
-        // Web Speech API setup
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
+            // Web Speech API setup
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
 
-        // Set the initial language to English (change as needed)
-        recognition.lang = 'en-US';
+            // Set the initial language to English (change as needed)
+            recognition.lang = 'en-US';
 
-        // Change language when the user selects a different option
-        languageSelect.addEventListener('change', (event) => {
-            recognition.lang = event.target.value;
-        });
-
-        startButton.addEventListener('click', () => {
-            recognition.start();
-            appendMessage('Listening...', 'bot');
-        });
-
-        recognition.onresult = function (event) {
-            const transcript = event.results[0][0].transcript;
-            appendMessage(`You said: ${transcript}`, 'user');
-            sendToServer(transcript);
-        };
-
-        function sendToServer(speechText) {
-            fetch('/query/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({ speech: speechText })
-            })
-            .then(response => response.json())
-            .then(data => {
-                appendMessage(data.response, 'bot');
-                speakResponse(data.response);
-            })
-            .catch(error => {
-                appendMessage('Error fetching response.', 'bot');
-                console.error('Error:', error);
+            // Change language when the user selects a different option
+            languageSelect.addEventListener('change', (event) => {
+                recognition.lang = event.target.value;
             });
-        }
 
-        function appendMessage(message, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add(`${sender}-message`);
-            messageDiv.innerText = message;
-            outputBox.appendChild(messageDiv);
-        }
+            startButton.addEventListener('click', () => {
+                recognition.start();
+                appendMessage('Listening...', 'bot');
+            });
 
-        function speakResponse(text) {
-            const speech = new SpeechSynthesisUtterance(text);
-            window.speechSynthesis.speak(speech);
-        }
+            recognition.onresult = function (event) {
+                const transcript = event.results[0][0].transcript;
+                appendMessage(`You said: ${transcript}`, 'user');
+                sendToServer(transcript);
+            };
 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
+            function sendToServer(speechText) {
+                fetch('/query/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ speech: speechText })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        appendMessage(data.response, 'bot');
+                        speakResponse(data.response);
+                    })
+                    .catch(error => {
+                        appendMessage('Error fetching response.', 'bot');
+                        console.error('Error:', error);
+                    });
+            }
+
+            function appendMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add(`${sender}-message`);
+                messageDiv.innerText = message;
+                outputBox.appendChild(messageDiv);
+            }
+
+            function speakResponse(text) {
+                const speech = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(speech);
+            }
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
                     }
                 }
+                return cookieValue;
             }
-            return cookieValue;
-        }
 
-        recognition.onerror = function (event) {
-            appendMessage('Error recognizing speech.', 'bot');
-            console.error('Speech recognition error:', event.error);
-        };
-    });
+
+            recognition.onerror = function (event) {
+                appendMessage('Error recognizing speech.', 'bot');
+                console.error('Speech recognition error:', event.error);
+            };
+        });
         // document.addEventListener('DOMContentLoaded', function () {
         //     const startButton = document.getElementById('startButton');
         //     const outputBox = document.getElementById('output');
