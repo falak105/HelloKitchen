@@ -42,7 +42,7 @@
                                         <small class="fst-italic">{{ recipe.instructions }}</small>
                                         
                                         <!-- Cook Button -->
-                                        <button class="btn btn-primary mt-3" onclick="showInstructions('{{ recipe.prep_time }}', '{{ recipe.instructions|escapejs }}')">Cook</button>
+                                        <button class="btn btn-primary mt-3" onclick="showInstructions('{{ recipe.prep_time }}', '{{ recipe.cooking_time }}', '{{ recipe.instructions|escapejs }}')">Cook</button>
                                     </div>
                                 </div>
                             </div>
@@ -65,6 +65,7 @@
                 </div>
                 <div class="modal-body" style="color: #ffae00;">
                     <p><strong>Preparation Time:</strong> <span id="prepTime"></span> minutes</p>
+                    <p><strong>Cooking Time:</strong> <span id="cookingTime"></span> minutes</p>
                     <p><strong>Instructions:</strong></p>
                     <p id="instructionsText"></p>
                 </div>
@@ -77,26 +78,27 @@
     </div>
 
     <script>
-        function showInstructions(prepTime, instructions) {
-            // Set preparation time and instructions in the modal
+        function showInstructions(prepTime, cookingTime, instructions) {
+            // Set preparation time, cooking time, and instructions in the modal
             document.getElementById('prepTime').textContent = prepTime;
+            document.getElementById('cookingTime').textContent = cookingTime;
             document.getElementById('instructionsText').textContent = instructions;
 
             // Show the modal
             const instructionModal = new bootstrap.Modal(document.getElementById('instructionModal'));
             instructionModal.show();
 
-            // Start TTS for preparation time and instructions
-            speakInstructions(prepTime, instructions);
+            // Start TTS for preparation time, cooking time, and instructions
+            speakInstructions(prepTime, cookingTime, instructions);
 
             // Stop TTS when modal is closed
             document.getElementById('instructionModal').addEventListener('hidden.bs.modal', stopSpeaking);
         }
 
-        function speakInstructions(prepTime, instructions) {
+        function speakInstructions(prepTime, cookingTime, instructions) {
             if ('speechSynthesis' in window) {
-                // Combine prep time and instructions into a single string for TTS
-                const textToSpeak = `The preparation time is ${prepTime} minutes. ${instructions}`;
+                // Combine prep time, cooking time, and instructions into a single string for TTS
+                const textToSpeak = `The preparation time is ${prepTime} minutes. The cooking time is ${cookingTime} minutes. ${instructions}`;
                 const utterance = new SpeechSynthesisUtterance(textToSpeak);
                 utterance.lang = 'en-US';
                 utterance.rate = 1;

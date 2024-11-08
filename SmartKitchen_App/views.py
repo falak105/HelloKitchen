@@ -14,6 +14,8 @@ from datetime import timedelta
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from google.cloud import translate_v2 as translate 
 from SmartKitchen_App.models import *
+from django.db.models import Count, Avg
+
 
 # Create your views here.
 
@@ -97,29 +99,72 @@ def userlogout(request):
     return redirect('userlogin')
 
 
-def admindashboard(request):
-    # Count total recipes
-    total_recipes = recipe.objects.count()  # Correct model reference
+# def admindashboard(request):
+#     # Count total recipes
+#     total_recipes = recipe.objects.count()  # Correct model reference
 
-    # Count active users
+#     # Count active users
+#     active_users = User.objects.filter(is_active=True).count()
+
+#     # Count new recipes this week
+#     start_of_week = timezone.now() - timedelta(days=timezone.now().weekday())
+#     new_recipes_this_week = recipe.objects.filter(
+#         created_at__gte=start_of_week).count()  # Correct model reference
+
+#     # Prepare context for rendering
+#     context = {
+#         'total_recipes': total_recipes,
+#         'active_users': active_users,
+#         'new_recipes_this_week': new_recipes_this_week,
+#     }
+
+#     # Only one return statement needed
+#     return render(request, 'admin/admindashboard.html', context)
+
+
+def admindashboard(request):
+    # Total number of recipes
+    total_recipes = recipe.objects.count()
+
+    # Number of active users
     active_users = User.objects.filter(is_active=True).count()
 
-    # Count new recipes this week
+    # New recipes added this week
     start_of_week = timezone.now() - timedelta(days=timezone.now().weekday())
-    new_recipes_this_week = recipe.objects.filter(
-        created_at__gte=start_of_week).count()  # Correct model reference
+    new_recipes_this_week = recipe.objects.filter(created_at__gte=start_of_week).count()
 
-    # Prepare context for rendering
+    # Average number of recipes per user
+    if active_users > 0:
+        avg_recipes_per_user = total_recipes / active_users
+    else:
+        avg_recipes_per_user = 0
+
+    # Most popular recipe based on count
+    most_popular_recipe = recipe.objects.values('r_name').annotate(count=Count('id')).order_by('-count').first()
+    most_popular_recipe_name = most_popular_recipe['r_name'] if most_popular_recipe else 'N/A'
+
+    # Recipe count by category
+    category_data = recipe.objects.values('category').annotate(count=Count('id')).order_by('-count')
+
+    # New recipes added in each of the last 4 weeks
+    last_4_weeks = []
+    for i in range(4):
+        start_date = timezone.now() - timedelta(weeks=i+1)
+        end_date = timezone.now() - timedelta(weeks=i)
+        week_recipes = recipe.objects.filter(created_at__range=[start_date, end_date]).count()
+        last_4_weeks.append(week_recipes)
+
     context = {
         'total_recipes': total_recipes,
         'active_users': active_users,
         'new_recipes_this_week': new_recipes_this_week,
+        'avg_recipes_per_user': round(avg_recipes_per_user, 2),
+        'most_popular_recipe': most_popular_recipe_name,
+        'category_data': category_data,
+        'last_4_weeks': last_4_weeks,
     }
 
-    # Only one return statement needed
     return render(request, 'admin/admindashboard.html', context)
-
-
 def userdashboard(request):
     user = request.user  # Get the currently logged-in user
 
@@ -418,7 +463,8 @@ def query(request):
 
 
 def usermanagement(request):
-    return render(request, 'usermanagement.html')
+    users = User.objects.all()  # Fetch all users (or filter as needed)
+    return render(request, 'admin/usermanagement.html', {'users': users})
 
 # Display all users
 
