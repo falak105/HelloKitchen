@@ -7,7 +7,6 @@ admin.site.register(healthAnalysis)
 admin.site.register(MealPlan)
 
 
-
 # class CustomUserAdmin(UserAdmin):
 #     # Fields to display in the admin list view
 #     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')

@@ -42,7 +42,7 @@
                                         <small class="fst-italic">{{ recipe.instructions }}</small>
                                         
                                         <!-- Cook Button -->
-                                        <button class="btn btn-primary mt-3" onclick="showInstructions('{{ recipe.prep_time }}', '{{ recipe.instructions|escapejs }}')">Cook</button>
+                                        <button class="btn btn-primary mt-3" onclick="showInstructions('{{ recipe.prep_time }}', '{{ recipe.instructions|escapejs }}')">COOK</button>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                     <p id="instructionsText"></p>
                 </div>
                 <div class="modal-footer" style="background-color: #ffffff;">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="color:#ffae00; border-color: #ffae00;">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="color:#ffae00; border-color: #ffae00;"><a href="{% url 'view_recipe' %}">Close</a></button>
                     <button type="button" class="btn btn-success" onclick="finishCooking()" style="background-color: #ffae00; color: black;">Done</button>
                 </div>
             </div>

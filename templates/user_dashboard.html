@@ -118,19 +118,24 @@
             </section>
             <section class="recent-recipes">
                 <h2>Recently Viewed Recipes</h2>
-                <div class="recipe-cards">
-                    <div class="recipe-card">
-                        <h3>Spaghetti Carbonara</h3>
-                        <p>Viewed on Oct 5, 2024</p>
+                    <div class="recipe-cards">
+                        {% for recipe in recent_recipe_views %}
+                            <div class="recipe-card">
+                                <h3>{{ recipe.recipe.r_name }}</h3>  <!-- Display the recipe name -->
+                                <p>Viewed on {{ recipe.viewed_at|date:"M d, Y" }}</p>  <!-- Display the date it was viewed -->
+                            </div>
+                        {% empty %}
+                            <p>No recent recipes viewed.</p>
+                        {% endfor %}
                     </div>
-                    <div class="recipe-card">
-                        <h3>Avocado Toast</h3>
+                    <!-- <div class="recipe-card">
+                        <h3>{{ recipe.name }}</h3>
                         <p>Viewed on Oct 4, 2024</p>
                     </div>
                     <div class="recipe-card">
-                        <h3>Grilled Chicken Salad</h3>
+                        <h3>{{ recipe.name }}</h3>
                         <p>Viewed on Oct 3, 2024</p>
-                    </div>
+                    </div> -->
                 </div>
             </section>
         </main>

@@ -1,3 +1,6 @@
+from .models import healthAnalysis  # Ensure correct model import
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -12,7 +15,7 @@ import json
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from google.cloud import translate_v2 as translate 
+from google.cloud import translate_v2 as translate
 from SmartKitchen_App.models import *
 
 # Create your views here.
@@ -34,10 +37,6 @@ def dashboard(request):
     return render(request, 'user/index.html')
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
-
 def userlogin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -51,16 +50,17 @@ def userlogin(request):
             login(request, user)
             # Redirect based on user type
             return redirect('admindashboard' if user.is_superuser else 'index')
-        
+
         else:
             if not user_exists:
                 msg = "User does not exist. Please register first."
             else:
                 msg = "Incorrect password. Please try again."
-                
+
             return render(request, 'userlogin.html', {'msg': msg})
 
     return render(request, "userlogin.html")
+
 
 def userreg(request):
     if request.method == "POST":
@@ -92,6 +92,7 @@ def userreg(request):
 
     return render(request, "userreg.html")
 
+
 def userlogout(request):
     logout(request)
     return redirect('userlogin')
@@ -120,6 +121,18 @@ def admindashboard(request):
     return render(request, 'admin/admindashboard.html', context)
 
 
+def view_recipe(request, recipe_id):
+    recipe = recipe.objects.get(id=recipe_id)
+
+    # Log the recipe view
+    if request.user.is_authenticated:
+        RecipeView.objects.create(
+            user=request.user, recipe=recipe, viewed_at=timezone.now())
+
+    # Render recipe detail page (replace 'recipe_detail.html' with your template)
+    return render(request, 'recipe_detail.html', {'recipe': recipe})
+
+
 def userdashboard(request):
     user = request.user  # Get the currently logged-in user
 
@@ -127,24 +140,31 @@ def userdashboard(request):
     total_recipes = recipe.objects.all().count()
 
     # Count planned meals by the user
-   ## planned_meals = MealPlan.objects.filter(user=user).count()
+    planned_meals = MealPlan.objects.all().count()
     # MealPlan.objects.filter(user=user).count()
+    # Fetch the most recent 5 recipes viewed by the user
+    # Fetch the most recent 5 recipes viewed by the user
+    recent_recipe_views = RecipeView.objects.filter(user=user).order_by('-viewed_at')[:5]
+    recent_recipes = [view.recipe for view in recent_recipe_views]  # Get the recipe from the views
+    print(recent_recipe_views)
 
     # Count shopping list items by the user
     # shopping_list_items = ShoppingList.objects.filter(user=user).count()
 
     context = {
         'total_recipes': total_recipes,
-        ##'planned_meals': planned_meals,
+        'planned_meals': planned_meals,
+        'recent_recipes': recent_recipes,
         # 'shopping_list_items': shopping_list_items,
+        'recent_recipe_views': recent_recipe_views,
     }
 
     return render(request, 'user_dashboard.html', context)
 
-
-    
     # If GET request, render meal plan form
-    return render(request, 'service.html')  # Ensure you have a template for this
+    # Ensure you have a template for this
+    return render(request, 'service.html')
+
 
 def menu(request):
     recipes = recipe.objects.all()
@@ -156,19 +176,22 @@ def menu(request):
             try:
                 # Get the selected recipe by its ID
                 selected_recipe = recipe.objects.get(id=recipe_id)
-                
+
                 # Store the selected recipe ID in the session
                 request.session['last_recipe'] = selected_recipe.id
                 # Optional: Store the last used recipe in the user's profile or perform other actions
 
                 # Add a success message to inform the user
-                messages.success(request, f'{selected_recipe.r_name} has been saved as your last recipe!')
+                messages.success(
+                    request, f'{selected_recipe.r_name} has been saved as your last recipe!')
             except recipe.DoesNotExist:
                 # Add an error message if the recipe ID does not exist
                 messages.error(request, 'Recipe not found!')
 
     # Render the page with recipes and any messages
     return render(request, 'menu.html', {'recipes': recipes})
+
+
 def service(request):
     return render(request, 'service.html')
 
@@ -207,15 +230,24 @@ def create_recipe(request):  # Keep your function name as is
             except Exception as e:
                 messages.error(request, f'Error saving recipe: {str(e)}')
         else:
-            messages.error(request, 'All fields are required. Please fill in all fields.')
+            messages.error(
+                request, 'All fields are required. Please fill in all fields.')
 
     # Render the recipe creation form
     return render(request, 'admin/recipe.html')
 
-
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import healthAnalysis  # Ensure correct model import
+def view_recipe(request, recipe_id):
+    recipe = recipe.objects.get(id=recipe_id)
+    
+    # Log the recipe view by the current user
+    RecipeView.objects.create(user=request.user, recipe=recipe)
+    
+    # Your code to display the recipe
+    context = {
+        'recipe': recipe
+    }
+    
+    return render(request, 'recipe_detail.html', context)
 
 def health_analysis(request):
     if request.method == 'POST':
@@ -223,7 +255,8 @@ def health_analysis(request):
         height = request.POST.get('height')
         level = request.POST.get('level')
         health_issue = request.POST.get('health_issues')
-        other_health_issue = request.POST.get('other_health_issue') if health_issue == 'Other' else None
+        other_health_issue = request.POST.get(
+            'other_health_issue') if health_issue == 'Other' else None
 
         # Ensure all required fields are provided
         if weight and height and level and health_issue:
@@ -241,7 +274,7 @@ def health_analysis(request):
         else:
             # If any fields are missing, return to form with an error
             return render(request, 'index.html', {'error': 'Please fill out all required fields.'})
-    
+
     # Render the form page for GET request
     return render(request, 'index.html')
 
@@ -300,8 +333,10 @@ def health_analysis_report(request):
         all_recommendations.append(rec)
 
     # Prepare data for the graph
-    total_food_recommended = sum(len(rec.get('food', [])) for rec in all_recommendations)
-    total_food_to_avoid = sum(len(rec.get('avoid', [])) for rec in all_recommendations)
+    total_food_recommended = sum(len(rec.get('food', []))
+                                 for rec in all_recommendations)
+    total_food_to_avoid = sum(len(rec.get('avoid', []))
+                              for rec in all_recommendations)
 
     # Render the health report
     return render(request, 'health.html', {
@@ -311,31 +346,6 @@ def health_analysis_report(request):
         'recommendations': all_recommendations,
         'total_food_recommended': total_food_recommended,
         'total_food_to_avoid': total_food_to_avoid,
-    })
-
-    # Sample data for BMI trend over time (replace with real data)
-    bmi_trend = [24, 25, 26, 24.5, 25.3, 23.9]  # Sample BMI values
-    bmi_dates = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]  # Corresponding months
-
-    # Sample data for Food Recommendation Bar Chart
-    recommended_foods_count = 10  # Replace with actual data
-    foods_to_avoid_count = 5  # Replace with actual data
-
-    # Sample data for Exercise vs. Sedentary Time Radar Chart
-    activity_data = {
-        "Exercise": 7,
-        "Sedentary": 5,
-        "Moderate Activity": 3,
-        "Light Activity": 4
-    }
-
-    return render(request, 'health.html', {
-        'bmi_status_data_json': json.dumps(bmi_status_data),
-        'bmi_trend': json.dumps(bmi_trend),
-        'bmi_dates': json.dumps(bmi_dates),
-        'recommended_foods_count': recommended_foods_count,
-        'foods_to_avoid_count': foods_to_avoid_count,
-        'activity_data': json.dumps(activity_data),
     })
 
 
@@ -389,7 +399,8 @@ def query(request):
             print(f"User input: {speech_text}")
 
             # Attempt to find recipes containing the provided name
-            matching_recipes = recipe.objects.filter(r_name__icontains=speech_text)
+            matching_recipes = recipe.objects.filter(
+                r_name__icontains=speech_text)
             print(f"Matching recipes count: {matching_recipes.count()}")
 
             if matching_recipes.exists():
@@ -414,7 +425,6 @@ def query(request):
             return JsonResponse({'error': 'Internal server error'}, status=500)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
-
 
 
 def usermanagement(request):
@@ -464,7 +474,8 @@ def delete_user(request, id):
         return redirect('user_list')
     return render(request, 'usermanagement.html', {'user': user})
 
-def MealPlan(request):
+
+def MealPlans(request):
     if request.method == 'POST':
         BreakFast = request.POST.get('Breakfast')
         Lunch = request.POST.get('Lunch')
@@ -472,13 +483,13 @@ def MealPlan(request):
         Date = request.POST.get(
             'Date') if MealPlan == 'Other' else None
 
-        # Save data to the database
         MealPlan.objects.create(
-            BreakFast=BreakFast,
+            Breakfast=BreakFast,  # Use lowercase breakfast
             Lunch=Lunch,
             Dinner=Dinner,
             Date=Date
         )
+
         # Redirect to the index page or a success message
         # Assuming 'index' is the URL name for the home page
         return redirect('user_dashboard')

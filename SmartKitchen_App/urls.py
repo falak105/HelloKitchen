@@ -34,6 +34,10 @@ urlpatterns = [
     path('users/<int:id>/edit/', views.edit_user, name='edit_user'),
     path('users/<int:id>/delete/', views.delete_user, name='delete_user'),
     path('query/', views.query, name='query'),
+    path('MealPlans/', views.MealPlans, name='MealPlans'),
+    path('view_recipe/', views.view_recipe, name='view_recipe'),
+
+    
     
   
     # path('notifications/',notf, name='notf'),

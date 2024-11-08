@@ -3,7 +3,6 @@
 {% block content %}
 
 <head>
-
     <style>
         body {
             background-image: url(/static/img/bg_log.png);
@@ -82,9 +81,14 @@
             color: #fff;
         }
 
+        /* Graph section with white background */
         .graph-container {
             margin-top: 30px;
             text-align: center;
+            background-color: #fff;  /* Set background to white */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .bar {
@@ -96,7 +100,16 @@
             margin: 5px 0;
             border-radius: 5px;
         }
+
+        /* Ensure the chart is not too wide */
+        canvas {
+            max-width: 100%;
+            border-radius: 10px;
+        }
     </style>
+
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -148,8 +161,7 @@
                     <li>Alcohol</li>
                     <li>Caffeine</li>
                 </ul>
-                <p><strong>Tips:</strong> Regular exercise and reducing sodium intake can help manage blood pressure.
-                </p>
+                <p><strong>Tips:</strong> Regular exercise and reducing sodium intake can help manage blood pressure.</p>
             </div>
             {% elif health_analysis.health_issue == "Obesity" %}
             <div class="recommendation">
@@ -185,8 +197,7 @@
                     <li>Full-fat Dairy</li>
                     <li>Fried Foods</li>
                 </ul>
-                <p><strong>Tips:</strong> Include soluble fiber in the diet and exercise regularly to improve
-                    cholesterol levels.</p>
+                <p><strong>Tips:</strong> Include soluble fiber in the diet and exercise regularly to improve cholesterol levels.</p>
             </div>
             {% elif health_analysis.health_issue == "Sugar" %}
             <div class="recommendation">
@@ -209,22 +220,59 @@
             {% endif %}
         </div>
 
-
-
         <!-- Graphical Representation -->
         <div class="graph-container">
-            <h2 style="color: #ffae00;">Graphical Representation of Food Recommendations</h2>
-            <div>
-                <p>Recommended Foods</p>
-                <div class="bar" style="width: {789/ total_food_recommended }}%;">{{ total_food_recommended }}</div>
-                <p>Foods to Avoid</p>
-                <div class="bar" style="width: {{ total_food_to_avoid }}%;">{{ total_food_to_avoid }}</div>
-            </div>
+            <h2 style="color: #ffae00;">Graphical Representation of Health Metrics</h2>
+            
+            <!-- Canvas for chart -->
+            <canvas id="healthChart" width="400" height="200"></canvas>
         </div>
     </div>
 
+    <script>
+        var ctx = document.getElementById('healthChart').getContext('2d');
+        
+        // Ensure data variables are passed from Django context
+        var bmiData = [{{ bmi_week1 }}, {{ bmi_week2 }}, {{ bmi_week3 }}, {{ bmi_week4 }}];
+        var weightData = [{{ weight_week1 }}, {{ weight_week2 }}, {{ weight_week3 }}, {{ weight_week4 }}];
 
-   
+        var healthChart = new Chart(ctx, {
+            type: 'line', // Line chart for trends
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], // Example weeks or time period
+                datasets: [{
+                    label: 'BMI',
+                    data: [{{ bmi }}], // Data passed from context
+                    borderColor: '#ffae00',
+                    backgroundColor: 'rgba(255, 174, 0, 0.2)',
+                    fill: true
+                }, {
+                    label: 'Weight (kg)',
+                    data: [{{health_analysis.weight}}], // Data passed from context
+                    borderColor: '#5A9B97',
+                    backgroundColor: 'rgba(90, 155, 151, 0.2)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Health Trends Over 4 Weeks'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 
 </body>
-{% endblock content %}
+
+{% endblock %}
